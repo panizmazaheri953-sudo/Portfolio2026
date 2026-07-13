@@ -1,0 +1,498 @@
+i liked this did i send u the correct coide? <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maya Reyes — Creative Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F1E6;
+    --ink:#15130E;
+    --cobalt:#2B3FE0;
+    --coral:#FF5A48;
+    --sun:#FFD23F;
+    --moss:#3E5C3A;
+    --shadow-off: 7px 7px 0px var(--ink);
+    --shadow-off-sm: 4px 4px 0px var(--ink);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+    cursor:none;
+  }
+  @media (hover:none), (pointer:coarse){ body{ cursor:auto; } }
+  ::selection{ background:var(--sun); color:var(--ink); }
+  a{ color:inherit; }
+  img{ display:block; max-width:100%; }
+
+  h1,h2,.display{ font-family:'Unbounded',sans-serif; }
+  .mono{ font-family:'Space Mono',monospace; }
+
+  a:focus-visible, button:focus-visible{
+    outline:3px solid var(--cobalt);
+    outline-offset:3px;
+  }
+
+  /* ===== halftone background ===== */
+  .halftone{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: radial-gradient(var(--ink) 1px, transparent 1px);
+    background-size: 22px 22px;
+    opacity:.06;
+  }
+  .grid-lines{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(21,19,14,0.045) 0, rgba(21,19,14,0.045) 1px, transparent 1px, transparent 120px);
+    opacity:1;
+  }
+
+  /* ===== custom cursor (crosshair) ===== */
+  #cur{
+    position:fixed; top:0; left:0; width:26px; height:26px;
+    pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:difference;
+    transition:width .25s ease, height .25s ease;
+  }
+  #cur::before,#cur::after{
+    content:''; position:absolute; background:var(--paper);
+  }
+  #cur::before{ top:50%; left:0; width:100%; height:2px; transform:translateY(-50%); }
+  #cur::after{ left:50%; top:0; height:100%; width:2px; transform:translateX(-50%); }
+  #cur.big{ width:52px; height:52px; }
+  @media (hover:none), (pointer:coarse){ #cur{ display:none; } }
+
+  /* ===== nav ===== */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px clamp(20px,4vw,48px);
+    background:var(--paper);
+    border-bottom:3px solid var(--ink);
+  }
+  .logo-mark{
+    display:flex; align-items:center; gap:10px;
+    text-decoration:none;
+  }
+  .logo-box{
+    width:38px; height:38px;
+    background:var(--cobalt);
+    border:2.5px solid var(--ink);
+    color:var(--paper);
+    font-family:'Unbounded',sans-serif;
+    font-weight:700;
+    font-size:13px;
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(-6deg);
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  .logo-text{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:15px; letter-spacing:-.01em; }
+
+  .nav-links{ display:flex; align-items:center; gap:2px; }
+  .nav-links a{
+    text-decoration:none;
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    padding:9px 14px;
+    position:relative;
+  }
+  .nav-links a span{
+    position:relative;
+  }
+  .nav-links a span::after{
+    content:'';
+    position:absolute; left:0; bottom:-4px;
+    width:0%; height:2px;
+    background:var(--coral);
+    transition:width .3s ease;
+  }
+  .nav-links a:hover span::after{ width:100%; }
+  .nav-links a.active span::after{ width:100%; background:var(--ink); }
+
+  .nav-cta{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    text-decoration:none;
+    background:var(--ink);
+    color:var(--paper);
+    padding:10px 18px;
+    border:2.5px solid var(--ink);
+    box-shadow:var(--shadow-off-sm);
+    transition:transform .18s ease, box-shadow .18s ease;
+    display:none;
+  }
+  .nav-cta:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+  .nav-cta:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+  @media (min-width:860px){ .nav-cta{ display:inline-block; } }
+
+  .burger{ display:none; }
+  @media (max-width:859px){
+    .nav-links{ display:none; }
+    .burger{
+      display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px;
+    }
+    .burger span{ width:24px; height:2.5px; background:var(--ink); display:block; }
+  }
+
+  /* ===== hero ===== */
+  .hero{
+    position:relative; z-index:2;
+    max-width:1320px;
+    margin:0 auto;
+    padding:150px clamp(20px,4vw,48px) 70px;
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:40px;
+    align-items:center;
+  }
+  @media (max-width:940px){
+    .hero{ grid-template-columns:1fr; padding-top:130px; }
+  }
+
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 12px;
+    border:2px solid var(--ink);
+    background:var(--sun);
+    box-shadow:var(--shadow-off-sm);
+    transform:rotate(-1.5deg);
+    margin-bottom:26px;
+  }
+  .eyebrow .pulse{
+    width:7px; height:7px; border-radius:50%; background:var(--moss);
+    animation:pulse 1.6s ease infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+
+  .headline{
+    font-size:clamp(48px, 8.4vw, 118px);
+    line-height:0.92;
+    font-weight:800;
+    letter-spacing:-.02em;
+    margin-bottom:26px;
+  }
+  .headline .l2{ color:var(--coral); display:block; }
+  .headline .l1{ display:block; }
+
+  .sub{
+    font-size:clamp(15px,1.5vw,18px);
+    line-height:1.65;
+    color:rgba(21,19,14,0.75);
+    max-width:480px;
+    margin-bottom:34px;
+  }
+  .sub strong{ color:var(--ink); font-weight:700; }
+
+  .cta-row{ display:flex; flex-wrap:wrap; gap:16px; margin-bottom:40px; }
+  .btn{
+    font-family:'Space Mono',monospace;
+    font-size:13.5px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    text-decoration:none;
+    padding:15px 26px;
+    border:2.5px solid var(--ink);
+    display:inline-flex; align-items:center; gap:10px;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn-solid{ background:var(--ink); color:var(--paper); box-shadow:var(--shadow-off-sm); }
+  .btn-solid:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+  .btn-solid:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+  .btn-outline{ background:var(--paper); color:var(--ink); box-shadow:var(--shadow-off-sm); }
+  .btn-outline:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); background:var(--cobalt); color:var(--paper); }
+  .btn-outline:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+
+  .stat-row{ display:flex; gap:34px; flex-wrap:wrap; }
+  .stat{ font-family:'Space Mono',monospace; }
+  .stat b{ display:block; font-size:22px; font-family:'Unbounded',sans-serif; font-weight:700; }
+  .stat span{ font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:rgba(21,19,14,0.6); }
+
+  /* ===== photo / badge column ===== */
+  .visual-col{
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .photo-card{
+    position:relative;
+    width:min(360px,86%);
+    aspect-ratio:4/5;
+    background:linear-gradient(150deg,#DCEAE3,#EFD9D2);
+    border:3px solid var(--ink);
+    box-shadow:12px 12px 0 var(--ink);
+    transform:rotate(-4deg);
+    transition:transform .5s cubic-bezier(.2,.8,.2,1);
+    overflow:hidden;
+  }
+  .photo-card:hover{ transform:rotate(-1.5deg) scale(1.015); }
+  .photo-card .ph-placeholder{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Unbounded',sans-serif;
+    font-size:clamp(48px,9vw,80px);
+    font-weight:800;
+    color:rgba(21,19,14,0.16);
+  }
+  /* PLACEHOLDER: replace .ph-placeholder with
+     <img src="your-photo.jpg" alt="Maya Reyes" style="width:100%;height:100%;object-fit:cover;">
+  */
+  .tape{
+    position:absolute;
+    width:74px; height:26px;
+    background:rgba(255,210,63,0.85);
+    border:1.5px solid rgba(21,19,14,0.5);
+  }
+  .tape-1{ top:-14px; left:20px; transform:rotate(-8deg); }
+  .tape-2{ bottom:-14px; right:26px; transform:rotate(6deg); background:rgba(255,90,72,0.75); }
+
+  .badge{
+    position:absolute;
+    bottom:-30px; left:-30px;
+    width:132px; height:132px;
+    z-index:5;
+    animation:spin 16s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .badge-center{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:none;
+  }
+  .badge-dot{
+    width:44px; height:44px;
+    background:var(--cobalt);
+    border:2.5px solid var(--ink);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px;
+  }
+
+  .sticker-star{
+    position:absolute; top:8%; right:-4%;
+    width:52px; height:52px;
+    color:var(--sun);
+    filter:drop-shadow(2px 2px 0 var(--ink));
+    animation:wiggle 5s ease-in-out infinite;
+  }
+  @keyframes wiggle{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(14deg); } }
+
+  /* ===== marquee ===== */
+  .marquee-wrap{
+    position:relative; z-index:2;
+    background:var(--ink);
+    border-top:3px solid var(--ink);
+    border-bottom:3px solid var(--ink);
+    overflow:hidden;
+    padding:16px 0;
+  }
+  .marquee-track{
+    display:flex;
+    width:max-content;
+    animation:marquee 90s linear infinite;
+  }
+  .marquee-wrap:hover .marquee-track{ animation-play-state:paused; }
+  .marquee-item{
+    font-family:'Space Mono',monospace;
+    font-size:15px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--paper);
+    padding:0 26px;
+    white-space:nowrap;
+    display:flex; align-items:center; gap:26px;
+  }
+  .marquee-item i{ font-style:normal; color:var(--coral); }
+  @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  /* ===== scroll cue ===== */
+  .scroll-cue{
+    position:relative; z-index:2;
+    display:flex; align-items:center; justify-content:center;
+    gap:10px;
+    padding:22px 0 8px;
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    color:rgba(21,19,14,0.55);
+  }
+  .scroll-cue .arrow{
+    animation:bob 1.6s ease infinite;
+  }
+  @keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(5px); } }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="halftone" aria-hidden="true"></div>
+<div class="grid-lines" aria-hidden="true"></div>
+<div id="cur" aria-hidden="true"></div>
+
+<!-- ===== NAV ===== -->
+<nav aria-label="Primary">
+  <a href="#home" class="logo-mark">
+    <span class="logo-box">PM</span>
+    <span class="logo-text">Paniz Etemad Mazaheri</span>
+  </a>
+  <div class="nav-links">
+    <a href="#home" class="active"><span>Home</span></a>
+    <a href="#cv"><span>CV</span></a>
+    <a href="#about"><span>About</span></a>
+    <a href="#projects"><span>Projects</span></a>
+    <a href="#contact"><span>Contact</span></a>
+  </div>
+  <a href="#contact" class="nav-cta">Let's talk →</a>
+  <button class="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero" id="home">
+  <div class="hero-text">
+    <div class="eyebrow"><span class="pulse"></span>Open to roles</div>
+
+    <!-- PLACEHOLDER: swap name -->
+    <h1 class="headline">
+      <span class="l1">Paniz</span>
+      <span class="l2">Etemad Mazaheri</span>
+    </h1>
+
+    <!-- PLACEHOLDER: swap intro copy -->
+    <p class="sub">
+IET Prize winner Industrial Electronics Engineer specializing in automation and robotics. I design control systems that solve real industrial problems, from PLC logic to robotic integration. Currently leading Industry 4.0 projects that turn concepts into working systems on the plant floor.
+    </p>
+
+    <div class="cta-row">
+        <a href="#projects" class="btn btn-solid">About Me <span aria-hidden="true">↗</span></a>
+      <a href="#projects" class="btn btn-solid">View Projects <span aria-hidden="true">↗</span></a>
+      <a href="#cv" class="btn btn-outline">Download CV <span aria-hidden="true">↓</span></a>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><b>2</b><span>Years Industry experience</span></div>
+      <div class="stat"><b>First Class</b><span>BEng Electronics Engineering </span></div>
+      <div class="stat"><b>MSc</b><span>Robotics and Automation</span></div>
+    </div>
+  </div>
+
+  <div class="visual-col">
+    <div class="photo-card" data-cursor="big">
+      <span class="tape tape-1" aria-hidden="true"></span>
+      <span class="tape tape-2" aria-hidden="true"></span>
+      <div class="ph-placeholder">MR</div>
+    </div>
+
+    <svg class="badge" viewBox="0 0 200 200" aria-hidden="true">
+      <defs>
+        <path id="circlePath" d="M 100,100 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" />
+      </defs>
+      <circle cx="100" cy="100" r="98" fill="var(--sun)" stroke="var(--ink)" stroke-width="3"></circle>
+      <text font-family="Space Mono, monospace" font-size="12.5" font-weight="700" letter-spacing="2" fill="#15130E">
+        <textPath href="#circlePath" startOffset="0%">
+          AVAILABLE FROM September 2026 
+        </textPath>
+      </text>
+    </svg>
+    <div class="badge-center" style="bottom:-30px; left:-30px; position:absolute; width:132px; height:132px;">
+      <div class="badge-dot">✦</div>
+    </div>
+
+    <svg class="sticker-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 0 L14.5 8.5 L23 11 L14.5 13.5 L12 22 L9.5 13.5 L1 11 L9.5 8.5 Z"/>
+    </svg>
+  </div>
+</header>
+
+<!-- ===== MARQUEE ===== -->
+<div class="marquee-wrap" role="presentation">
+  <div class="marquee-track" id="mTrack">
+    <div class="marquee-item">
+ <span>PLC PROGRAMMING</span><i>✦</i><span>TIA PORTAL</span><i>✦</i><span>CODESYS</span><i>✦</i>
+      <span>IEC 61131-3</span><i>✦</i><span>SIEMENS S7</span><i>✦</i><span>SCADA / WINCC</span><i>✦</i>
+      <span>HMI DEVELOPMENT</span><i>✦</i><span>DIGITAL TWINS</span><i>✦</i>
+      <span>SIEMENS NX MCD</span><i>✦</i><span>PLANT SIMULATION</span><i>✦</i><span>COPPELIASIM</span><i>✦</i>
+      <span>VIRTUAL COMMISSIONING</span><i>✦</i><span>OPC UA</span><i>✦</i><span>MQTT</span><i>✦</i>
+      <span>NODE-RED</span><i>✦</i><span>PROFIBUS</span><i>✦</i><span>PROFINET</span><i>✦</i>
+      <span>INDUSTRIAL ETHERNET</span><i>✦</i><span>EDGE COMPUTING</span><i>✦</i><span>MINDSPHERE</span><i>✦</i>
+      <span>MES / ISA-95</span><i>✦</i><span>IEC 61850</span><i>✦</i><span>HIL TESTING</span><i>✦</i>
+      <span>OPAL-RT</span><i>✦</i><span>FUNCTIONAL SAFETY</span><i>✦</i><span>IEC 61511</span><i>✦</i>
+      <span>IEC 61508</span><i>✦</i><span>HAZOP</span><i>✦</i><span>LOPA</span><i>✦</i>
+      <span>SIL ASSESSMENT</span><i>✦</i><span>EXSILENTIA</span><i>✦</i><span>ATEX</span><i>✦</i>
+      <span>SAFETY INSTRUMENTED SYSTEMS</span><i>✦</i><span>ROS</span><i>✦</i><span>MATLAB/SIMULINK</span><i>✦</i>
+      <span>PYTHON</span><i>✦</i><span>C++</span><i>✦</i><span>KINEMATICS</span><i>✦</i>
+      <span>MOTION CONTROL</span><i>✦</i><span>PATH PLANNING</span><i>✦</i><span>SIMATIC ROBOTICS</span><i>✦</i>
+      <span>PCB DESIGN</span><i>✦</i><span>MPLAB X</span><i>✦</i><span>CST STUDIO</span><i>✦</i>
+      <span>EMBEDDED SYSTEMS</span><i>✦</i><span>P&ID</span><i>✦</i><span>MCC SCHEMATICS</span><i>✦</i>
+      <span>FAT/SAT</span><i>✦</i>
+      <!-- duplicate for seamless loop -->
+      <span>PLC PROGRAMMING</span><i>✦</i><span>TIA PORTAL</span><i>✦</i><span>CODESYS</span><i>✦</i>
+      <span>IEC 61131-3</span><i>✦</i><span>SIEMENS S7</span><i>✦</i><span>SCADA / WINCC</span><i>✦</i>
+      <span>HMI DEVELOPMENT</span><i>✦</i><span>DIGITAL TWINS</span><i>✦</i>
+      <span>SIEMENS NX MCD</span><i>✦</i><span>PLANT SIMULATION</span><i>✦</i><span>COPPELIASIM</span><i>✦</i>
+      <span>VIRTUAL COMMISSIONING</span><i>✦</i><span>OPC UA</span><i>✦</i><span>MQTT</span><i>✦</i>
+      <span>NODE-RED</span><i>✦</i><span>PROFIBUS</span><i>✦</i><span>PROFINET</span><i>✦</i>
+      <span>INDUSTRIAL ETHERNET</span><i>✦</i><span>EDGE COMPUTING</span><i>✦</i><span>MINDSPHERE</span><i>✦</i>
+      <span>MES / ISA-95</span><i>✦</i><span>IEC 61850</span><i>✦</i><span>HIL TESTING</span><i>✦</i>
+      <span>OPAL-RT</span><i>✦</i><span>FUNCTIONAL SAFETY</span><i>✦</i><span>IEC 61511</span><i>✦</i>
+      <span>IEC 61508</span><i>✦</i><span>HAZOP</span><i>✦</i><span>LOPA</span><i>✦</i>
+      <span>SIL ASSESSMENT</span><i>✦</i><span>EXSILENTIA</span><i>✦</i><span>ATEX</span><i>✦</i>
+      <span>SAFETY INSTRUMENTED SYSTEMS</span><i>✦</i><span>ROS</span><i>✦</i><span>MATLAB/SIMULINK</span><i>✦</i>
+      <span>PYTHON</span><i>✦</i><span>C++</span><i>✦</i><span>KINEMATICS</span><i>✦</i>
+      <span>MOTION CONTROL</span><i>✦</i><span>PATH PLANNING</span><i>✦</i><span>SIMATIC ROBOTICS</span><i>✦</i>
+      <span>PCB DESIGN</span><i>✦</i><span>MPLAB X</span><i>✦</i><span>CST STUDIO</span><i>✦</i>
+      <span>EMBEDDED SYSTEMS</span><i>✦</i><span>P&ID</span><i>✦</i><span>MCC SCHEMATICS</span><i>✦</i>
+      <span>FAT/SAT</span><i>✦</i>
+    </div>
+  </div>
+</div>
+
+<div class="scroll-cue">
+  <span>Scroll to explore</span><span class="arrow">↓</span>
+</div>
+
+<script>
+  // custom crosshair cursor
+  const cur = document.getElementById('cur');
+  window.addEventListener('mousemove', (e)=>{
+    cur.style.left = e.clientX+'px';
+    cur.style.top = e.clientY+'px';
+  });
+  document.querySelectorAll('[data-cursor="big"], a, button').forEach(el=>{
+    el.addEventListener('mouseenter', ()=> cur.classList.add('big'));
+    el.addEventListener('mouseleave', ()=> cur.classList.remove('big'));
+  });
+
+  // mobile burger -> simple toggle placeholder (reveals link list under nav)
+  const burger = document.querySelector('.burger');
+  const links = document.querySelector('.nav-links');
+  burger?.addEventListener('click', ()=>{
+    const open = links.style.display === 'flex';
+    links.style.display = open ? 'none' : 'flex';
+    links.style.cssText += open ? '' : 'position:fixed;top:70px;left:0;right:0;background:var(--paper);flex-direction:column;padding:16px 24px;border-bottom:3px solid var(--ink);gap:2px;';
+  });
+</script>
+
+</body>
+</html>
