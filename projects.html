@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Projects — Paniz Etemad Mazaheri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F1E6;
+    --ink:#15130E;
+    --cobalt:#2B3FE0;
+    --coral:#FF5A48;
+    --sun:#FFD23F;
+    --moss:#3E5C3A;
+    --shadow-off: 7px 7px 0px var(--ink);
+    --shadow-off-sm: 4px 4px 0px var(--ink);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+    cursor:none;
+  }
+  @media (hover:none), (pointer:coarse){ body{ cursor:auto; } }
+  ::selection{ background:var(--sun); color:var(--ink); }
+  a{ color:inherit; }
+  img{ display:block; max-width:100%; }
+  h1,h2,h3,.display{ font-family:'Unbounded',sans-serif; }
+  .mono{ font-family:'Space Mono',monospace; }
+  a:focus-visible, button:focus-visible{ outline:3px solid var(--cobalt); outline-offset:3px; }
+
+  /* ===== blueprint background texture ===== */
+  .halftone{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: radial-gradient(var(--ink) 1px, transparent 1px);
+    background-size: 22px 22px;
+    opacity:.055;
+  }
+  .grid-lines{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(43,63,224,0.05) 0, rgba(43,63,224,0.05) 1px, transparent 1px, transparent 64px),
+      repeating-linear-gradient(0deg, rgba(43,63,224,0.05) 0, rgba(43,63,224,0.05) 1px, transparent 1px, transparent 64px);
+  }
+  .reg-mark{ position:fixed; width:22px; height:22px; z-index:1; pointer-events:none; opacity:.4; }
+  .reg-mark::before, .reg-mark::after{ content:''; position:absolute; background:var(--ink); }
+  .reg-mark::before{ top:50%; left:0; width:100%; height:1.5px; transform:translateY(-50%); }
+  .reg-mark::after{ left:50%; top:0; height:100%; width:1.5px; transform:translateX(-50%); }
+  .reg-tl{ top:14px; left:14px; } .reg-tr{ top:14px; right:14px; }
+  .reg-bl{ bottom:14px; left:14px; } .reg-br{ bottom:14px; right:14px; }
+  @media (max-width:700px){ .reg-mark{ display:none; } }
+
+  /* ===== custom cursor ===== */
+  #cur{
+    position:fixed; top:0; left:0; width:26px; height:26px;
+    pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:difference;
+    transition:width .25s ease, height .25s ease;
+  }
+  #cur::before,#cur::after{ content:''; position:absolute; background:var(--paper); }
+  #cur::before{ top:50%; left:0; width:100%; height:2px; transform:translateY(-50%); }
+  #cur::after{ left:50%; top:0; height:100%; width:2px; transform:translateX(-50%); }
+  #cur.big{ width:52px; height:52px; }
+  @media (hover:none), (pointer:coarse){ #cur{ display:none; } }
+
+  /* ===== nav ===== */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px clamp(20px,4vw,48px);
+    background:var(--paper);
+    border-bottom:3px solid var(--ink);
+  }
+  .logo-mark{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .logo-box{
+    width:38px; height:38px; background:var(--cobalt); border:2.5px solid var(--ink); color:var(--paper);
+    font-family:'Unbounded',sans-serif; font-weight:700; font-size:13px;
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(-6deg); box-shadow:3px 3px 0 var(--ink);
+  }
+  .logo-text{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:15px; letter-spacing:-.01em; }
+  .nav-links{ display:flex; align-items:center; gap:2px; }
+  .nav-links a{ text-decoration:none; font-family:'Space Mono',monospace; font-size:12.5px; text-transform:uppercase; letter-spacing:.05em; padding:9px 14px; position:relative; }
+  .nav-links a span{ position:relative; }
+  .nav-links a span::after{ content:''; position:absolute; left:0; bottom:-4px; width:0%; height:2px; background:var(--coral); transition:width .3s ease; }
+  .nav-links a:hover span::after{ width:100%; }
+  .nav-links a.active span::after{ width:100%; background:var(--ink); }
+  .nav-cta{
+    font-family:'Space Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.04em; text-decoration:none;
+    background:var(--ink); color:var(--paper); padding:10px 18px; border:2.5px solid var(--ink);
+    box-shadow:var(--shadow-off-sm); transition:transform .18s ease, box-shadow .18s ease; display:none;
+  }
+  .nav-cta:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+  .nav-cta:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+  @media (min-width:860px){ .nav-cta{ display:inline-block; } }
+  .burger{ display:none; }
+  @media (max-width:859px){
+    .nav-links{ display:none; }
+    .burger{ display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px; }
+    .burger span{ width:24px; height:2.5px; background:var(--ink); display:block; }
+  }
+
+  /* ===== intro ===== */
+  .intro{
+    position:relative; z-index:2; max-width:1320px; margin:0 auto;
+    padding:150px clamp(20px,4vw,48px) 0;
+  }
+  .eyebrow{
+    font-family:'Space Mono',monospace; font-size:12.5px; text-transform:uppercase; letter-spacing:.14em;
+    display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border:2px solid var(--ink);
+    background:var(--sun); box-shadow:var(--shadow-off-sm); transform:rotate(-1.5deg); margin-bottom:26px;
+  }
+  .eyebrow .pulse{ width:7px; height:7px; border-radius:50%; background:var(--moss); animation:pulse 1.6s ease infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+  .intro-row{ display:flex; align-items:flex-end; justify-content:space-between; gap:40px; flex-wrap:wrap; padding-bottom:34px; }
+  .page-title{ font-size:clamp(46px,8vw,104px); line-height:0.92; font-weight:800; letter-spacing:-.02em; }
+  .page-title .accent{ color:var(--coral); }
+  .intro-sub{ max-width:400px; font-size:clamp(15px,1.4vw,17px); line-height:1.65; color:rgba(21,19,14,0.75); padding-bottom:6px; }
+  .intro-sub strong{ color:var(--ink); font-weight:700; }
+
+  .spec-line{ display:flex; align-items:center; gap:14px; padding:0 0 30px; }
+  .spec-line .tick{ width:1.5px; height:16px; background:var(--ink); flex-shrink:0; }
+  .spec-line .rule{ flex:1; height:1.5px; background:var(--ink); position:relative; }
+  .spec-line .rule::before, .spec-line .rule::after{ content:''; position:absolute; top:-4px; width:1.5px; height:9px; background:var(--ink); }
+  .spec-line .rule::before{ left:0; } .spec-line .rule::after{ right:0; }
+  .spec-line .spec-text{ font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:rgba(21,19,14,0.6); white-space:nowrap; }
+
+  /* ===== toggle-switch filters ===== */
+  .filters-bar{
+    position:relative; z-index:2; max-width:1320px; margin:0 auto;
+    padding:0 clamp(20px,4vw,48px) 20px;
+    display:flex; gap:30px; flex-wrap:wrap; align-items:flex-start;
+    border-bottom:3px solid var(--ink);
+    padding-bottom:34px;
+  }
+  .switch-toggle{
+    background:none; border:none; cursor:pointer; padding:0;
+    display:flex; flex-direction:column; align-items:center; gap:9px;
+    font-family:'Space Mono',monospace;
+  }
+  .switch-track{
+    width:46px; height:24px; border:2px solid var(--ink); border-radius:2px;
+    background:rgba(21,19,14,0.04); position:relative; transition:background .25s ease;
+  }
+  .switch-knob{
+    position:absolute; top:2px; left:2px; width:16px; height:16px; background:var(--paper);
+    border:2px solid var(--ink); transition:transform .25s cubic-bezier(.4,0,.2,1), background .25s ease;
+  }
+  .switch-toggle.active .switch-track{ background:rgba(43,63,224,0.12); }
+  .switch-toggle.active .switch-knob{ transform:translateX(20px); background:var(--cobalt); }
+  .switch-led{ width:6px; height:6px; border-radius:50%; background:rgba(21,19,14,0.25); transition:background .25s ease, box-shadow .25s ease; }
+  .switch-toggle.active .switch-led{ background:var(--coral); box-shadow:0 0 6px rgba(255,90,72,0.7); }
+  .switch-label-row{ display:flex; align-items:center; gap:6px; }
+  .switch-label{ font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink); }
+  .switch-toggle:hover .switch-track{ border-color:var(--cobalt); }
+
+  /* ===== grid ===== */
+  .projects-grid{
+    position:relative; z-index:2; max-width:1320px; margin:0 auto;
+    padding:36px clamp(20px,4vw,48px) 90px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:38px 28px;
+  }
+  @media (max-width:1024px){ .projects-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:680px){ .projects-grid{ grid-template-columns:1fr; } }
+
+  /* ===== flip card ===== */
+  .project-card{
+    position:relative;
+    height:480px;
+    perspective:1800px;
+    opacity:0; transform:translateY(24px);
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .project-card.animated{ opacity:1; transform:translateY(0); }
+  .project-card.hidden-card{ display:none; }
+
+  /* perforated tear + punch hole, fixed to the physical card regardless of flip */
+  .rev-stamp{
+    position:absolute; top:-13px; left:16px; z-index:6;
+    background:var(--paper); border:1.5px dashed var(--ink); color:var(--ink);
+    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+    padding:3px 9px; transform:rotate(-6deg);
+  }
+  .tear-line{ position:absolute; top:-1.5px; left:14px; right:14px; height:0; border-top:2px dashed rgba(21,19,14,0.35); z-index:6; }
+  .punch-hole{
+    position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+    width:11px; height:11px; border-radius:50%; background:var(--paper); border:2px solid var(--ink); z-index:7;
+  }
+
+  .card-inner{
+    position:relative; width:100%; height:100%;
+    transform-style:preserve-3d;
+    transition:transform .68s cubic-bezier(.4,0,.2,1);
+    cursor:pointer;
+  }
+  .project-card.flipped .card-inner{ transform:rotateY(180deg); }
+
+  .card-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    background:var(--paper); border:2.5px solid var(--ink); box-shadow:var(--shadow-off);
+    display:flex; flex-direction:column; overflow:hidden;
+    transition:box-shadow .3s ease;
+  }
+  .project-card:hover .card-face{ box-shadow:11px 11px 0 var(--ink); }
+  .card-back{ transform:rotateY(180deg); overflow-y:auto; }
+  .card-back::-webkit-scrollbar{ width:4px; }
+  .card-back::-webkit-scrollbar-thumb{ background:rgba(21,19,14,0.2); }
+
+  .project-media{
+    position:relative; height:186px; border-bottom:2.5px solid var(--ink); overflow:hidden; flex-shrink:0;
+    background:linear-gradient(150deg,#DCEAE3,#EFD9D2);
+  }
+  .project-media img, .project-media video{ width:100%; height:100%; object-fit:cover; }
+  .project-media::after{
+    content:''; position:absolute; top:0; left:-45%; width:32%; height:2px;
+    background:var(--cobalt); box-shadow:0 0 8px rgba(43,63,224,0.7);
+    transition:left .6s ease; z-index:6; pointer-events:none;
+  }
+  .project-card:hover .project-media::after{ left:130%; }
+
+  .corner{ position:absolute; width:13px; height:13px; opacity:.55; z-index:2; pointer-events:none; }
+  .c-tl{ top:8px; left:8px; border-top:2px solid var(--ink); border-left:2px solid var(--ink); }
+  .c-tr{ top:8px; right:8px; border-top:2px solid var(--ink); border-right:2px solid var(--ink); }
+  .c-bl{ bottom:8px; left:8px; border-bottom:2px solid var(--ink); border-left:2px solid var(--ink); }
+  .c-br{ bottom:8px; right:8px; border-bottom:2px solid var(--ink); border-right:2px solid var(--ink); }
+
+  .ph-slot{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; text-align:center; padding:12px; }
+  .ph-slot svg{ width:46px; height:46px; opacity:.28; margin-bottom:2px; }
+  .ph-slot .ph-label{ font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:rgba(21,19,14,0.42); }
+
+  .year-badge{
+    position:absolute; bottom:8px; right:8px; z-index:2; background:var(--ink); color:var(--paper);
+    font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.06em; padding:3px 8px;
+  }
+
+  .project-body{ padding:22px 20px 20px; display:flex; flex-direction:column; flex:1; min-height:0; }
+  .project-meta{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .project-cat{ font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--cobalt); font-weight:700; }
+  .project-date{ font-family:'Space Mono',monospace; font-size:11px; color:rgba(21,19,14,0.5); }
+  .project-name{ font-family:'Unbounded',sans-serif; font-size:1.04rem; font-weight:700; margin-bottom:9px; line-height:1.28; }
+  .project-summary{
+    font-size:0.86rem; line-height:1.58; color:rgba(21,19,14,0.7); margin-bottom:14px;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; flex:1;
+  }
+  .project-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+  .project-tags span{ font-family:'Space Mono',monospace; font-size:10.5px; border:1.5px solid var(--ink); padding:3px 9px; letter-spacing:.03em; }
+  .expand-btn{
+    align-self:flex-start; background:none; border:none; font-family:'Space Mono',monospace; font-size:12px;
+    text-transform:uppercase; letter-spacing:.05em; color:var(--coral); cursor:pointer; padding:0;
+    display:flex; align-items:center; gap:6px; transition:letter-spacing .25s ease;
+  }
+  .expand-btn:hover{ letter-spacing:.13em; }
+
+  /* ===== card back — spec sheet ===== */
+  .back-body{ padding:20px 20px 18px; display:flex; flex-direction:column; flex:1; }
+  .back-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap:10px; }
+  .back-meta{ display:flex; flex-direction:column; gap:3px; }
+  .back-category{ font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--cobalt); font-weight:700; }
+  .back-year{ font-family:'Space Mono',monospace; font-size:10px; color:rgba(21,19,14,0.5); }
+  .back-close{
+    background:none; border:1.5px dashed var(--ink); cursor:pointer; padding:4px 9px; flex-shrink:0;
+    font-family:'Space Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink);
+    display:flex; align-items:center; gap:4px; transition:border-color .2s ease, color .2s ease;
+  }
+  .back-close:hover{ border-color:var(--coral); color:var(--coral); }
+  .back-title{ font-family:'Unbounded',sans-serif; font-size:1rem; font-weight:700; margin-bottom:10px; line-height:1.28; }
+  .back-desc{ font-size:0.8rem; line-height:1.55; color:rgba(21,19,14,0.8); margin-bottom:14px; }
+  .back-section{ margin-bottom:14px; }
+  .back-section-title{
+    font-family:'Space Mono',monospace; font-size:9.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:rgba(21,19,14,0.45); margin-bottom:8px; padding-bottom:5px; border-bottom:1.5px solid var(--ink);
+  }
+  .back-highlights{ list-style:none; padding:0; }
+  .back-highlights li{ position:relative; padding-left:15px; margin-bottom:6px; font-size:0.78rem; line-height:1.5; color:rgba(21,19,14,0.85); }
+  .back-highlights li::before{ content:"→"; position:absolute; left:0; color:var(--coral); font-weight:700; font-size:0.72rem; }
+  .back-tags{ display:flex; flex-wrap:wrap; gap:5px; }
+  .back-tags span{ font-family:'Space Mono',monospace; font-size:9.5px; border:1.3px solid var(--ink); padding:2.5px 7px; background:rgba(43,63,224,0.06); }
+
+  /* ===== footer ===== */
+  footer{ border-top:3px solid var(--ink); padding:34px clamp(20px,4vw,48px); position:relative; z-index:2; }
+  .footer-content{ max-width:1320px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; }
+  .footer-logo{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:14px; }
+  .footer-tag{ font-family:'Space Mono',monospace; font-size:11px; color:rgba(21,19,14,0.55); text-transform:uppercase; letter-spacing:.06em; margin-top:2px; }
+  .footer-links{ display:flex; gap:22px; }
+  .footer-links a{ text-decoration:none; font-family:'Space Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.05em; }
+  .footer-links a:hover{ color:var(--coral); }
+  .footer-copy{ font-family:'Space Mono',monospace; font-size:11px; color:rgba(21,19,14,0.4); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    .card-inner{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="halftone" aria-hidden="true"></div>
+<div class="grid-lines" aria-hidden="true"></div>
+<div class="reg-mark reg-tl" aria-hidden="true"></div>
+<div class="reg-mark reg-tr" aria-hidden="true"></div>
+<div class="reg-mark reg-bl" aria-hidden="true"></div>
+<div class="reg-mark reg-br" aria-hidden="true"></div>
+<div id="cur" aria-hidden="true"></div>
+
+<!-- ===== NAV ===== -->
+<nav aria-label="Primary">
+  <a href="index.html" class="logo-mark">
+    <span class="logo-box">PM</span>
+    <span class="logo-text">Paniz Etemad Mazaheri</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#home"><span>Home</span></a>
+    <a href="index.html#about"><span>About</span></a>
+    <a href="projects.html" class="active"><span>Projects</span></a>
+    <a href="index.html#contact"><span>Contact</span></a>
+  </div>
+  <a href="index.html#contact" class="nav-cta">Contact→</a>
+  <button class="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ===== INTRO ===== -->
+<section class="intro">
+  <div class="eyebrow"><span class="pulse"></span>Portfolio</div>
+  <div class="intro-row">
+    <h1 class="page-title">Selected<br><span class="accent">Work</span></h1>
+    <p class="intro-sub">
+      A collection of engineering projects across <strong>robotics, industrial automation, functional safety and applied ML</strong> — from PLC logic and virtual commissioning to research-stage control systems.
+    </p>
+  </div>
+  <div class="spec-line">
+    <span class="tick"></span>
+    <span class="rule"></span>
+    <span class="spec-text mono" id="specCount">08 PROJECTS LOGGED — CLICK A CARD TO FLIP IT</span>
+    <span class="rule"></span>
+    <span class="tick"></span>
+  </div>
+</section>
+
+<!-- ===== FILTERS — panel switches ===== -->
+<div class="filters-bar" id="filtersBar">
+  <button class="switch-toggle active" data-filter="all">
+    <span class="switch-track"><span class="switch-knob"></span></span>
+    <span class="switch-label-row"><span class="switch-led"></span><span class="switch-label">All</span></span>
+  </button>
+  <button class="switch-toggle" data-filter="robotics">
+    <span class="switch-track"><span class="switch-knob"></span></span>
+    <span class="switch-label-row"><span class="switch-led"></span><span class="switch-label">Robotics</span></span>
+  </button>
+  <button class="switch-toggle" data-filter="plc">
+    <span class="switch-track"><span class="switch-knob"></span></span>
+    <span class="switch-label-row"><span class="switch-led"></span><span class="switch-label">PLC / SCADA</span></span>
+  </button>
+  <button class="switch-toggle" data-filter="research">
+    <span class="switch-track"><span class="switch-knob"></span></span>
+    <span class="switch-label-row"><span class="switch-led"></span><span class="switch-label">Research</span></span>
+  </button>
+  <button class="switch-toggle" data-filter="iot">
+    <span class="switch-track"><span class="switch-knob"></span></span>
+    <span class="switch-label-row"><span class="switch-led"></span><span class="switch-label">IoT</span></span>
+  </button>
+</div>
+
+<!-- ===== GRID — 8 open slots. Fill title/category/dates/tags/media here, and
+     the matching entry in projectsData (bottom script) drives the back face. ===== -->
+<div class="projects-grid" id="projectsGrid">
+
+  <article class="project-card" data-category="robotics" data-id="1">
+    <div class="rev-stamp">Rev A</div>
+    <span class="tear-line"></span><span class="punch-hole"></span>
+    <div class="card-inner">
+      <div class="card-face card-front">
+        <div class="project-media"><div class="year-badge">20XX</div></div>
+        <div class="project-body">
+          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
+          <h2 class="project-name">Project title 01</h2>
+          <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
+          <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
+          <button class="expand-btn" data-target="1">Flip for details ↻</button>
+        </div>
+      </div>
+      <div class="card-face card-back" data-back="1"></div>
+    </div>
+  </article>
+
+  <article class="project-card" data-category="plc" data-id="2">
+    <div class="rev-stamp">Rev B</div>
+    <span class="tear-line"></span><span class="punch-hole"></span>
+    <div class="card-inner">
+      <div class="card-face card-front">
+        <div class="project-media"><div class="year-badge">20XX</div></div>
+        <div class="project-body">
+          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
+          <h2 class="project-name">Project title 02</h2>
+          <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
+          <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
+          <button class="expand-btn" data-target="2">Flip for details ↻</button>
+        </div>
+      </div>
+      <div class="card-face card-back" data-back="2"></div>
+    </div>
+  </article>
+
+  <article class="project-card" data-category="research" data-id="3">
+    <div class="rev-stamp">Rev C</div>
+    <span class="tear-line"></span><span class="punch-hole"></span>
+    <div class="card-inner">
+      <div class="card-face card-front">
+        <div class="project-media"><div class="year-badge">20XX</div></div>
+        <div class="project-body">
+          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
+          <h2 class="project-name">Project title 03</h2>
+          <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
+          <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
+          <button class="expand-btn" data-target="3">Flip for details ↻</button>
+        </div>
+      </div>
+      <div class="card-face card-back" data-back="3"></div>
+    </div>
+  </article>
+
+  <article class="project-card" data-category="iot" data-id="4">
+    <div class="rev-stamp">Rev D</div>
+    <span class="tear-line"></span><span class="punch-hole"></span>
+    <div class="card-inner">
+      <div class="card-face card-front">
+        <div class="project-media"><div class="year-badge">20XX</div></div>
+        <div class="project-body">
+          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
+          <h2 class="project-name">Project title 04</h2>
+          <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
+          <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
+          <button class="expand-btn" data-target="4">Flip for details ↻</button>
+        </div>
+      </div>
+      <div class="card-face card-back" data-back="4"></div>
+    </div>
+  </article>
+
+  <article class="project-card" data-category="robotics" data-id="5">
+    <div class="rev-stamp">Rev E</div>
+    <span class="tear-line"></span><span class="punch-hole"></span>
+    <div class="card-inner">
+      <div class="card-face card-front">
+        <div class="project-media"><div class="year-badge">20XX</div></div>
+        <div class="project-body">
+          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
+          <h2 class="project-name">Project title 05</h2>
+          <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
+          <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
+          <button class="expand-btn" data-target="5">Flip for details ↻</button>
+        </div>
+      </div>
+      <div class="card-face card-back" data-back="5"></div>
+    </div>
+  </article>
+
+  <article class="project-card" data-category="plc" data-id="6">
+    <div class="rev-stamp">Rev F</div>
+    <span class="tear-line"></span><span class="punch-hole"></span>
+    <div class="card-inner">
+      <div class="card-face card-front">
+        <div class="project-media"><div class="year-badge">20XX</div></div>
+        <div class="project-body">
+          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
+          <h2 class="project-name">Project title 06</h2>
+          <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
+          <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
+          <button class="expand-btn" data-target="6">Flip for details ↻</button>
+        </div>
+      </div>
+      <div class="card-face card-back" data-back="6"></div>
+    </div>
+  </article>
+
+  <article class="project-card" data-category="research" data-id="7">
+    <div class="rev-stamp">Rev G</div>
+    <span class="tear-line"></span><span class="punch-hole"></span>
+    <div class="card-inner">
+      <div class="card-face card-front">
+        <div class="project-media"><div class="year-badge">20XX</div></div>
+        <div class="project-body">
+          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
+          <h2 class="project-name">Project title 07</h2>
+          <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
+          <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
+          <button class="expand-btn" data-target="7">Flip for details ↻</button>
+        </div>
+      </div>
+      <div class="card-face card-back" data-back="7"></div>
+    </div>
+  </article>
+
+  <article class="project-card" data-category="iot" data-id="8">
+    <div class="rev-stamp">Rev H</div>
+    <span class="tear-line"></span><span class="punch-hole"></span>
+    <div class="card-inner">
+      <div class="card-face card-front">
+        <div class="project-media"><div class="year-badge">20XX</div></div>
+        <div class="project-body">
+          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
+          <h2 class="project-name">Project title 08</h2>
+          <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
+          <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
+          <button class="expand-btn" data-target="8">Flip for details ↻</button>
+        </div>
+      </div>
+      <div class="card-face card-back" data-back="8"></div>
+    </div>
+  </article>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-content">
+    <div>
+      <div class="footer-logo">Paniz Etemad Mazaheri</div>
+      <div class="footer-tag">Robotics &amp; Industrial Automation Engineering</div>
+    </div>
+    <div class="footer-links">
+      <a href="index.html#home">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Paniz Etemad Mazaheri.</div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ============================================
+     PROJECT DATA — replace each entry with your own
+     title, description, highlights, tags and media.
+     media items: { type:'image'|'video', src:'assets/...', alt:'...' }
+     Leave media: [] to keep the line-art placeholder icon.
+     The back face (flip side) is generated entirely from this object,
+     so you only need to edit text in ONE place per project.
+     ============================================ */
+  const projectsData = {
+    1: { title:'Project title 01', category:'Robotics', year:'20XX', description:'Full description of project 01 goes here — what it was, why it mattered, and your role in it.',
+         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
+    2: { title:'Project title 02', category:'PLC / SCADA', year:'20XX', description:'Full description of project 02 goes here — what it was, why it mattered, and your role in it.',
+         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
+    3: { title:'Project title 03', category:'Research', year:'20XX', description:'Full description of project 03 goes here — what it was, why it mattered, and your role in it.',
+         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
+    4: { title:'Project title 04', category:'IoT', year:'20XX', description:'Full description of project 04 goes here — what it was, why it mattered, and your role in it.',
+         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
+    5: { title:'Project title 05', category:'Robotics', year:'20XX', description:'Full description of project 05 goes here — what it was, why it mattered, and your role in it.',
+         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
+    6: { title:'Project title 06', category:'PLC / SCADA', year:'20XX', description:'Full description of project 06 goes here — what it was, why it mattered, and your role in it.',
+         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
+    7: { title:'Project title 07', category:'Research', year:'20XX', description:'Full description of project 07 goes here — what it was, why it mattered, and your role in it.',
+         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
+    8: { title:'Project title 08', category:'IoT', year:'20XX', description:'Full description of project 08 goes here — what it was, why it mattered, and your role in it.',
+         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
+  };
+
+  /* simple line-art watermark per category */
+  const ICONS = {
+    robotics: '<circle cx="10" cy="38" r="3.5"/><line x1="10" y1="34.5" x2="10" y2="24"/><line x1="10" y1="24" x2="27" y2="17"/><circle cx="27" cy="17" r="3"/><line x1="27" y1="17" x2="39" y2="9"/><path d="M39 9 l4 -1.5 M39 9 l1.5 4"/>',
+    plc: '<rect x="12" y="12" width="24" height="24" rx="1.5"/><line x1="12" y1="18" x2="6" y2="18"/><line x1="12" y1="24" x2="6" y2="24"/><line x1="12" y1="30" x2="6" y2="30"/><line x1="36" y1="18" x2="42" y2="18"/><line x1="36" y1="24" x2="42" y2="24"/><line x1="36" y1="30" x2="42" y2="30"/><line x1="18" y1="12" x2="18" y2="6"/><line x1="24" y1="12" x2="24" y2="6"/><line x1="30" y1="12" x2="30" y2="6"/><line x1="18" y1="36" x2="18" y2="42"/><line x1="24" y1="36" x2="24" y2="42"/><line x1="30" y1="36" x2="30" y2="42"/>',
+    research: '<polyline points="4,24 12,24 16,9 22,39 28,15 32,24 44,24"/>',
+    iot: '<circle cx="24" cy="35" r="2.6"/><path d="M16.5 27 a11 11 0 0 1 15 0"/><path d="M10 20 a19 19 0 0 1 28 0"/><path d="M4 13.5 a27 27 0 0 1 40 0"/>'
+  };
+  const CORNERS = '<span class="corner c-tl"></span><span class="corner c-tr"></span><span class="corner c-bl"></span><span class="corner c-br"></span>';
+
+  function iconSvg(category) {
+    const path = ICONS[category] || ICONS.plc;
+    return `<svg viewBox="0 0 48 48" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+  }
+
+  const carousels = new Map();
+
+  /* ===== carousel (front-face media only) ===== */
+  class MediaCarousel {
+    constructor(container, mediaItems, opts = {}) {
+      this.container = container; this.mediaItems = mediaItems; this.currentIndex = 0;
+      this.autoPlayDelay = opts.autoPlayDelay || 4200;
+      this.enableAutoPlay = opts.enableAutoPlay !== false;
+      this.init();
+    }
+    init() {
+      if (!this.mediaItems || this.mediaItems.length === 0) return;
+      this.slidesContainer = this.container.querySelector('.carousel-slides');
+      this.prevBtn = this.container.querySelector('.carousel-btn-prev');
+      this.nextBtn = this.container.querySelector('.carousel-btn-next');
+      this.dotsContainer = this.container.querySelector('.carousel-dots');
+      this.renderSlides();
+      if (this.prevBtn) this.prevBtn.addEventListener('click', (e) => { e.stopPropagation(); this.prev(); });
+      if (this.nextBtn) this.nextBtn.addEventListener('click', (e) => { e.stopPropagation(); this.next(); });
+      if (this.enableAutoPlay && this.mediaItems.length > 1) {
+        this.startAutoPlay();
+        this.container.addEventListener('mouseenter', () => this.stopAutoPlay());
+        this.container.addEventListener('mouseleave', () => this.startAutoPlay());
+      }
+    }
+    renderSlides() {
+      if (!this.slidesContainer) return;
+      this.slidesContainer.innerHTML = '';
+      this.mediaItems.forEach((item, idx) => {
+        const slide = document.createElement('div');
+        slide.className = 'carousel-slide';
+        if (item.type === 'video') {
+          const video = document.createElement('video');
+          video.src = item.src; video.loop = true; video.muted = true; video.playsInline = true;
+          if (idx === this.currentIndex) { video.autoplay = true; setTimeout(() => video.play().catch(()=>{}), 100); }
+          slide.appendChild(video);
+        } else {
+          const img = document.createElement('img');
+          img.src = item.src; img.alt = item.alt || 'Project media';
+          slide.appendChild(img);
+        }
+        this.slidesContainer.appendChild(slide);
+      });
+      this.updateDots(); this.updateSlidePosition();
+    }
+    updateSlidePosition() {
+      if (!this.slidesContainer) return;
+      this.slidesContainer.style.transform = `translateX(${-this.currentIndex * 100}%)`;
+      const slides = this.slidesContainer.children;
+      for (let i = 0; i < slides.length; i++) {
+        const video = slides[i].querySelector('video');
+        if (video) { i === this.currentIndex ? video.play().catch(()=>{}) : video.pause(); }
+      }
+      this.updateDots();
+    }
+    updateDots() {
+      if (!this.dotsContainer) return;
+      const dots = this.dotsContainer.querySelectorAll('.carousel-dot');
+      dots.forEach((dot, idx) => dot.classList.toggle('active', idx === this.currentIndex));
+    }
+    goTo(index) {
+      if (index < 0) index = this.mediaItems.length - 1;
+      if (index >= this.mediaItems.length) index = 0;
+      this.currentIndex = index; this.updateSlidePosition();
+    }
+    next() { this.goTo(this.currentIndex + 1); this.resetAutoPlay(); }
+    prev() { this.goTo(this.currentIndex - 1); this.resetAutoPlay(); }
+    startAutoPlay() {
+      if (!this.enableAutoPlay || this.mediaItems.length <= 1) return;
+      if (this.autoPlayInterval) clearInterval(this.autoPlayInterval);
+      this.autoPlayInterval = setInterval(() => this.next(), this.autoPlayDelay);
+    }
+    stopAutoPlay() { if (this.autoPlayInterval) { clearInterval(this.autoPlayInterval); this.autoPlayInterval = null; } }
+    resetAutoPlay() { if (!this.enableAutoPlay) return; this.stopAutoPlay(); this.startAutoPlay(); }
+  }
+
+  function buildPlaceholder(category) {
+    const wrap = document.createElement('div');
+    wrap.className = 'ph-slot';
+    wrap.innerHTML = `${iconSvg(category)}<span class="ph-label">Add media</span>`;
+    return wrap;
+  }
+
+  function createCardCarousel(cardEl, mediaItems, category) {
+    const mediaContainer = cardEl.querySelector('.project-media');
+    if (!mediaContainer) return null;
+    const yearBadge = mediaContainer.querySelector('.year-badge');
+    const badgeHTML = yearBadge ? yearBadge.outerHTML : '';
+
+    if (!mediaItems || mediaItems.length === 0) {
+      mediaContainer.innerHTML = badgeHTML + CORNERS;
+      mediaContainer.appendChild(buildPlaceholder(category));
+      return null;
+    }
+    mediaContainer.innerHTML = `
+      <div class="carousel-container">
+        <div class="carousel-slides"></div>
+        ${mediaItems.length > 1 ? `
+          <button class="carousel-btn carousel-btn-prev">‹</button>
+          <button class="carousel-btn carousel-btn-next">›</button>
+          <div class="carousel-dots"></div>` : ''}
+      </div>${badgeHTML}${CORNERS}`;
+    const carouselContainer = mediaContainer.querySelector('.carousel-container');
+    return new MediaCarousel(carouselContainer, mediaItems, { autoPlayDelay: 4200, enableAutoPlay: mediaItems.length > 1 });
+  }
+
+  function buildBackFace(id) {
+    const data = projectsData[id];
+    if (!data) return '';
+    return `
+      <div class="back-body">
+        <div class="back-top">
+          <div class="back-meta">
+            <span class="back-category">${data.category}</span>
+            <span class="back-year">${data.year}</span>
+          </div>
+          <button class="back-close" data-close="${id}">↺ Back</button>
+        </div>
+        <h3 class="back-title">${data.title}</h3>
+        <p class="back-desc">${data.description}</p>
+        <div class="back-section">
+          <div class="back-section-title">Key Highlights</div>
+          <ul class="back-highlights">${data.highlights.map(h => `<li>${h}</li>`).join('')}</ul>
+        </div>
+        <div class="back-section">
+          <div class="back-section-title">Technologies Used</div>
+          <div class="back-tags">${data.tags.map(t => `<span>${t}</span>`).join('')}</div>
+        </div>
+      </div>`;
+  }
+
+  function initPage() {
+    const cards = document.querySelectorAll('.project-card');
+
+    const countEl = document.getElementById('specCount');
+    if (countEl) countEl.textContent = `${String(cards.length).padStart(2,'0')} PROJECTS LOGGED — CLICK A CARD TO FLIP IT`;
+
+    cards.forEach(card => {
+      const id = card.getAttribute('data-id');
+      const category = card.getAttribute('data-category');
+      const data = projectsData[id];
+
+      const carousel = createCardCarousel(card, data ? data.media : [], category);
+      if (carousel) carousels.set(id, carousel);
+
+      const backFace = card.querySelector('.card-back');
+      if (backFace) backFace.innerHTML = buildBackFace(id);
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('animated'), i * 70);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    cards.forEach(card => observer.observe(card));
+
+    document.querySelectorAll('.switch-toggle').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.switch-toggle').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const filter = this.getAttribute('data-filter');
+        cards.forEach(card => {
+          const match = filter === 'all' || card.getAttribute('data-category') === filter;
+          if (match) {
+            card.classList.remove('hidden-card');
+            card.classList.remove('animated');
+            setTimeout(() => card.classList.add('animated'), 40);
+          } else {
+            card.classList.add('hidden-card');
+            card.classList.remove('flipped');
+          }
+        });
+      });
+    });
+
+    /* click anywhere on the card (except carousel controls) flips it */
+    cards.forEach(card => {
+      card.addEventListener('click', function (e) {
+        if (e.target.closest('.carousel-btn') || e.target.closest('.carousel-dot') || e.target.closest('.back-close')) return;
+        card.classList.add('flipped');
+      });
+    });
+
+    /* flip back */
+    document.querySelectorAll('.back-close').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const card = this.closest('.project-card');
+        if (card) card.classList.remove('flipped');
+      });
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.project-card.flipped').forEach(c => c.classList.remove('flipped'));
+    });
+  }
+
+  initPage();
+
+  /* ===== custom cursor ===== */
+  const cur = document.getElementById('cur');
+  window.addEventListener('mousemove', (e) => { cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px'; });
+  document.querySelectorAll('a, button, .project-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cur.classList.add('big'));
+    el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+  });
+
+  /* ===== mobile nav ===== */
+  const burger = document.querySelector('.burger');
+  const links = document.querySelector('.nav-links');
+  burger?.addEventListener('click', () => {
+    const open = links.style.display === 'flex';
+    links.style.display = open ? 'none' : 'flex';
+    links.style.cssText += open ? '' : 'position:fixed;top:70px;left:0;right:0;background:var(--paper);flex-direction:column;padding:16px 24px;border-bottom:3px solid var(--ink);gap:2px;z-index:99;';
+  });
+});
+</script>
+
+</body>
+</html>
