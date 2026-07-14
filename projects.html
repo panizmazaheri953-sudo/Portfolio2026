@@ -373,17 +373,22 @@
      the matching entry in projectsData (bottom script) drives the back face. ===== -->
 <div class="projects-grid" id="projectsGrid">
 
-  <article class="project-card" data-category="robotics" data-id="1">
-    <div class="rev-stamp">Rev A</div>
+  <article class="project-card" data-category="plc" data-id="1">
+    <div class="rev-stamp"></div>
     <span class="tear-line"></span><span class="punch-hole"></span>
     <div class="card-inner">
       <div class="card-face card-front">
-        <div class="project-media"><div class="year-badge">20XX</div></div>
+        <div class="project-media"><div class="year-badge">2026</div></div>
         <div class="project-body">
-          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
-          <h2 class="project-name">Project title 01</h2>
-          <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
-          <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
+          <div class="project-meta"><span class="project-cat">PLC, Automation, Digital Twin</span><span class="project-date"></span></div>
+          <h2 class="project-name">FESTO CP Lab Output Station: Digital Twin</h2>
+<p class="project-summary">Virtual twin of a pick-and-place station for safe offline testing of automation logic before physical deployment.</p>
+<div class="project-tags">
+  <span>Siemens NX</span>
+  <span>TIA Portal</span>
+  <span>PLC Programming</span>
+  <span>HMI Design</span>
+</div>
           <button class="expand-btn" data-target="1">Flip for details ↻</button>
         </div>
       </div>
@@ -452,7 +457,7 @@
       <div class="card-face card-front">
         <div class="project-media"><div class="year-badge">20XX</div></div>
         <div class="project-body">
-          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
+          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date"></span></div>
           <h2 class="project-name">Project title 05</h2>
           <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
           <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
@@ -547,9 +552,26 @@ document.addEventListener('DOMContentLoaded', function () {
      so you only need to edit text in ONE place per project.
      ============================================ */
   const projectsData = {
-    1: { title:'Project title 01', category:'Robotics', year:'20XX', description:'Full description of project 01 goes here — what it was, why it mattered, and your role in it.',
-         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
-    2: { title:'Project title 02', category:'PLC / SCADA', year:'20XX', description:'Full description of project 02 goes here — what it was, why it mattered, and your role in it.',
+ 1: { 
+  title: 'FESTO CP Lab Output Station: Digital Twin', 
+  category: 'Robotics', 
+  year: '2024', 
+  description: 'The Output Station is the final stage of a phone case manufacturing line, responsible for transporting cases across two conveyors, detecting carrier positions with sensors, and performing precise pick-and-place operations onto final trays. To eliminate commissioning risks and reduce physical testing downtime, I built a digital twin of the station that mirrors every mechanical and control function. I developed the virtual model, programmed the automation logic, and validated the entire sequence in simulation, from conveyor startup to sensor triggers to robotic placement. This approach caught logic errors early and ensured a smooth transition to physical deployment.',
+  highlights: [
+       'Built a digital twin of the Pick&Place station using Siemens NX',
+    'Developed PLC control logic in TIA Portal ',
+    'Created an intuitive HMI for real-time operator monitoring',
+    'Performed virtual commissioning to validate system performance'
+  ], 
+  tags: ['Siemens NX', 'TIA Portal', 'PLC Programming', 'HMI Design'], 
+  media: [] 
+},
+    
+    
+    
+    
+    
+    2: { title:'title hi', category:'PLC / SCADA', year:'20XX', description:'Full description of project 02 goes here — what it was, why it mattered, and your role in it.',
          highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
     3: { title:'Project title 03', category:'Research', year:'20XX', description:'Full description of project 03 goes here — what it was, why it mattered, and your role in it.',
          highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
