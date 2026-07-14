@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About — Paniz Etemad Mazaheri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F1E6;
+    --ink:#15130E;
+    --cobalt:#2B3FE0;
+    --coral:#FF5A48;
+    --sun:#FFD23F;
+    --moss:#3E5C3A;
+    --shadow-off: 7px 7px 0px var(--ink);
+    --shadow-off-sm: 4px 4px 0px var(--ink);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ background:var(--paper); color:var(--ink); font-family:'Inter',sans-serif; overflow-x:hidden; position:relative; cursor:none; }
+  @media (hover:none), (pointer:coarse){ body{ cursor:auto; } }
+  ::selection{ background:var(--sun); color:var(--ink); }
+  a{ color:inherit; }
+  img{ display:block; max-width:100%; }
+  h1,h2,h3,.display{ font-family:'Unbounded',sans-serif; }
+  .mono{ font-family:'Space Mono',monospace; }
+  a:focus-visible, button:focus-visible{ outline:3px solid var(--cobalt); outline-offset:3px; }
+
+  /* ===== blueprint background texture ===== */
+  .halftone{ position:fixed; inset:0; z-index:0; pointer-events:none; background-image: radial-gradient(var(--ink) 1px, transparent 1px); background-size:22px 22px; opacity:.055; }
+  .grid-lines{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(43,63,224,0.05) 0, rgba(43,63,224,0.05) 1px, transparent 1px, transparent 64px),
+      repeating-linear-gradient(0deg, rgba(43,63,224,0.05) 0, rgba(43,63,224,0.05) 1px, transparent 1px, transparent 64px);
+  }
+  .reg-mark{ position:fixed; width:22px; height:22px; z-index:1; pointer-events:none; opacity:.4; }
+  .reg-mark::before, .reg-mark::after{ content:''; position:absolute; background:var(--ink); }
+  .reg-mark::before{ top:50%; left:0; width:100%; height:1.5px; transform:translateY(-50%); }
+  .reg-mark::after{ left:50%; top:0; height:100%; width:1.5px; transform:translateX(-50%); }
+  .reg-tl{ top:14px; left:14px; } .reg-tr{ top:14px; right:14px; }
+  .reg-bl{ bottom:14px; left:14px; } .reg-br{ bottom:14px; right:14px; }
+  @media (max-width:700px){ .reg-mark{ display:none; } }
+
+  /* ===== custom cursor ===== */
+  #cur{ position:fixed; top:0; left:0; width:26px; height:26px; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); mix-blend-mode:difference; transition:width .25s ease, height .25s ease; }
+  #cur::before,#cur::after{ content:''; position:absolute; background:var(--paper); }
+  #cur::before{ top:50%; left:0; width:100%; height:2px; transform:translateY(-50%); }
+  #cur::after{ left:50%; top:0; height:100%; width:2px; transform:translateX(-50%); }
+  #cur.big{ width:52px; height:52px; }
+  @media (hover:none), (pointer:coarse){ #cur{ display:none; } }
+
+  /* ===== nav ===== */
+  nav{ position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:16px clamp(20px,4vw,48px); background:var(--paper); border-bottom:3px solid var(--ink); }
+  .logo-mark{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .logo-box{ width:38px; height:38px; background:var(--cobalt); border:2.5px solid var(--ink); color:var(--paper); font-family:'Unbounded',sans-serif; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; transform:rotate(-6deg); box-shadow:3px 3px 0 var(--ink); }
+  .logo-text{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:15px; letter-spacing:-.01em; }
+  .nav-links{ display:flex; align-items:center; gap:2px; }
+  .nav-links a{ text-decoration:none; font-family:'Space Mono',monospace; font-size:12.5px; text-transform:uppercase; letter-spacing:.05em; padding:9px 14px; position:relative; }
+  .nav-links a span{ position:relative; }
+  .nav-links a span::after{ content:''; position:absolute; left:0; bottom:-4px; width:0%; height:2px; background:var(--coral); transition:width .3s ease; }
+  .nav-links a:hover span::after{ width:100%; }
+  .nav-links a.active span::after{ width:100%; background:var(--ink); }
+  .nav-cta{ font-family:'Space Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.04em; text-decoration:none; background:var(--ink); color:var(--paper); padding:10px 18px; border:2.5px solid var(--ink); box-shadow:var(--shadow-off-sm); transition:transform .18s ease, box-shadow .18s ease; display:none; }
+  .nav-cta:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+  .nav-cta:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+  @media (min-width:860px){ .nav-cta{ display:inline-block; } }
+  .burger{ display:none; }
+  @media (max-width:859px){ .nav-links{ display:none; } .burger{ display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px; } .burger span{ width:24px; height:2.5px; background:var(--ink); display:block; } }
+
+  /* ===== intro ===== */
+  .intro{ position:relative; z-index:2; max-width:1180px; margin:0 auto; padding:150px clamp(20px,4vw,48px) 10px; }
+  .eyebrow{ font-family:'Space Mono',monospace; font-size:12.5px; text-transform:uppercase; letter-spacing:.14em; display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border:2px solid var(--ink); background:var(--sun); box-shadow:var(--shadow-off-sm); transform:rotate(-1.5deg); margin-bottom:26px; }
+  .eyebrow .pulse{ width:7px; height:7px; border-radius:50%; background:var(--moss); animation:pulse 1.6s ease infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+  .page-title{ font-size:clamp(44px,7.4vw,92px); line-height:0.95; font-weight:800; letter-spacing:-.02em; margin-bottom:24px; }
+  .page-title .accent{ color:var(--coral); }
+  .intro-sub{ max-width:620px; font-size:clamp(15px,1.5vw,18px); line-height:1.7; color:rgba(21,19,14,0.78); margin-bottom:44px; }
+  .intro-sub strong{ color:var(--ink); font-weight:700; }
+
+  /* ===== nameplate ===== */
+  .id-plate{
+    position:relative; border:3px solid var(--ink); background:rgba(255,255,255,0.35);
+    box-shadow:var(--shadow-off); padding:22px clamp(18px,3vw,34px);
+    display:grid; grid-template-columns:repeat(5,1fr); gap:0;
+    margin-bottom:90px;
+  }
+  .plate-field{ padding:0 18px; border-left:1.5px dashed rgba(21,19,14,0.3); display:flex; flex-direction:column; gap:6px; }
+  .plate-field:first-child{ border-left:none; padding-left:0; }
+  .plate-label{ font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:rgba(21,19,14,0.5); }
+  .plate-value{ font-family:'Unbounded',sans-serif; font-size:0.92rem; font-weight:700; line-height:1.3; }
+  .plate-value.small{ font-family:'Space Mono',monospace; font-weight:400; font-size:0.82rem; }
+  .rivet{ position:absolute; width:14px; height:14px; opacity:.55; }
+  .rivet::before, .rivet::after{ content:''; position:absolute; background:var(--ink); }
+  .rivet::before{ top:50%; left:0; width:100%; height:1.5px; transform:translateY(-50%); }
+  .rivet::after{ left:50%; top:0; height:100%; width:1.5px; transform:translateX(-50%); }
+  .rivet-tl{ top:-7px; left:-7px; } .rivet-tr{ top:-7px; right:-7px; }
+  .rivet-bl{ bottom:-7px; left:-7px; } .rivet-br{ bottom:-7px; right:-7px; }
+  @media (max-width:900px){ .id-plate{ grid-template-columns:repeat(2,1fr); gap:18px 0; } .plate-field{ border-left:none; padding-left:0; } }
+
+  /* ===== section shell ===== */
+  .section{ position:relative; z-index:2; max-width:1180px; margin:0 auto; padding:10px clamp(20px,4vw,48px) 70px; }
+  .section-head{ display:flex; align-items:baseline; gap:16px; margin-bottom:40px; flex-wrap:wrap; }
+  .section-num{ font-family:'Space Mono',monospace; font-size:12px; color:var(--coral); }
+  .section-title{ font-family:'Unbounded',sans-serif; font-size:clamp(26px,3.4vw,38px); font-weight:800; letter-spacing:-.01em; }
+  .section-rule{ flex:1; height:1.5px; background:rgba(21,19,14,0.2); min-width:60px; }
+
+  /* ===== track record — circuit trace timeline ===== */
+  .track{ position:relative; padding-left:46px; }
+  .track::before{ content:''; position:absolute; left:13px; top:6px; bottom:6px; width:2.5px; background:repeating-linear-gradient(var(--cobalt) 0 8px, transparent 8px 14px); }
+  .track-item{ position:relative; margin-bottom:44px; }
+  .track-item:last-child{ margin-bottom:0; }
+  .track-node{
+    position:absolute; left:-46px; top:2px; width:28px; height:28px; background:var(--paper);
+    border:2.5px solid var(--cobalt); border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:2;
+  }
+  .track-node svg{ width:15px; height:15px; }
+  .track-card{ background:var(--paper); border:2.5px solid var(--ink); box-shadow:var(--shadow-off-sm); padding:22px 24px; }
+  .track-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:8px; flex-wrap:wrap; }
+  .track-role{ font-family:'Unbounded',sans-serif; font-size:1.15rem; font-weight:700; }
+  .track-date{ font-family:'Space Mono',monospace; font-size:11.5px; color:rgba(21,19,14,0.5); white-space:nowrap; padding-top:4px; }
+  .track-org{ font-family:'Space Mono',monospace; font-size:12px; color:var(--cobalt); letter-spacing:.04em; text-transform:uppercase; margin-bottom:12px; font-weight:700; }
+  .track-desc{ font-size:0.92rem; line-height:1.65; color:rgba(21,19,14,0.78); }
+  .track-desc b{ color:var(--ink); }
+
+  /* ===== certificates ===== */
+  .cert-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; }
+  @media (max-width:760px){ .cert-grid{ grid-template-columns:1fr; } }
+  .cert-card{
+    border:2.5px solid var(--ink); background:var(--paper); overflow:hidden; cursor:pointer;
+    transition:transform .2s ease, box-shadow .2s ease; box-shadow:var(--shadow-off-sm);
+  }
+  .cert-card:hover{ transform:translate(-3px,-3px); box-shadow:8px 8px 0 var(--ink); }
+  .cert-thumb{
+    position:relative; height:160px; border-bottom:2.5px solid var(--ink); overflow:hidden;
+    background:linear-gradient(150deg,#DCEAE3,#EFD9D2); display:flex; align-items:center; justify-content:center;
+  }
+  .cert-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .cert-thumb .cert-ph{ display:flex; flex-direction:column; align-items:center; gap:6px; opacity:.55; }
+  .cert-thumb .cert-ph svg{ width:36px; height:36px; opacity:.5; }
+  .cert-thumb .cert-ph span{ font-family:'Space Mono',monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:rgba(21,19,14,0.45); }
+  .cert-corner{ position:absolute; width:12px; height:12px; opacity:.55; z-index:2; pointer-events:none; }
+  .cert-c-tl{ top:7px; left:7px; border-top:2px solid var(--ink); border-left:2px solid var(--ink); }
+  .cert-c-tr{ top:7px; right:7px; border-top:2px solid var(--ink); border-right:2px solid var(--ink); }
+  .cert-c-bl{ bottom:7px; left:7px; border-bottom:2px solid var(--ink); border-left:2px solid var(--ink); }
+  .cert-c-br{ bottom:7px; right:7px; border-bottom:2px solid var(--ink); border-right:2px solid var(--ink); }
+  .cert-body{ padding:14px 16px 16px; }
+  .cert-title{ font-family:'Unbounded',sans-serif; font-size:0.9rem; font-weight:700; margin-bottom:4px; line-height:1.3; }
+  .cert-issuer{ font-size:11px; color:var(--cobalt); letter-spacing:.04em; text-transform:uppercase; margin-bottom:2px; font-weight:700; }
+  .cert-date{ font-size:10.5px; color:rgba(21,19,14,0.5); }
+
+  .cert-lightbox{
+    position:fixed; inset:0; background:rgba(21,19,14,0.72); z-index:6000;
+    display:flex; align-items:center; justify-content:center; padding:30px;
+    opacity:0; pointer-events:none; transition:opacity .3s ease;
+  }
+  .cert-lightbox.open{ opacity:1; pointer-events:all; }
+  .cert-lightbox-inner{
+    position:relative; max-width:640px; width:100%; background:var(--paper);
+    border:3px solid var(--ink); box-shadow:var(--shadow-off); max-height:88vh;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  .cert-lightbox-close{
+    align-self:flex-end; background:var(--ink); color:var(--paper); border:none;
+    padding:10px 18px; font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:.08em;
+    text-transform:uppercase; cursor:pointer;
+  }
+  .cert-lightbox-close:hover{ background:var(--coral); }
+  .cert-lightbox-frame{ background:linear-gradient(150deg,#DCEAE3,#EFD9D2); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .cert-lightbox-frame img{ max-width:100%; max-height:60vh; object-fit:contain; }
+  .cert-lightbox-caption{ padding:18px 22px 22px; border-top:2px solid var(--ink); }
+  .cert-lightbox-title{ font-family:'Unbounded',sans-serif; font-size:1.05rem; font-weight:700; margin-bottom:6px; }
+  .cert-lightbox-meta{ font-size:11.5px; color:rgba(21,19,14,0.55); text-transform:uppercase; letter-spacing:.05em; }
+
+  /* ===== toolkit ===== */
+  .toolkit-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:26px; }
+  @media (max-width:760px){ .toolkit-grid{ grid-template-columns:1fr; } }
+  .toolkit-group{ border:2.5px solid var(--ink); background:rgba(255,255,255,0.3); padding:20px 22px; }
+  .toolkit-title{ font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:rgba(21,19,14,0.5); margin-bottom:14px; padding-bottom:10px; border-bottom:1.5px dashed rgba(21,19,14,0.3); }
+  .toolkit-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .toolkit-tags span{ font-family:'Space Mono',monospace; font-size:11.5px; border:1.5px solid var(--ink); padding:5px 11px; letter-spacing:.02em; transition:background .2s ease, color .2s ease, border-color .2s ease; }
+  .toolkit-tags span:hover{ background:var(--cobalt); border-color:var(--cobalt); color:var(--paper); }
+
+  /* ===== recognition stamps ===== */
+  .stamp-row{ display:flex; gap:22px; flex-wrap:wrap; }
+  .stamp{ border:1.5px dashed var(--ink); padding:14px 20px; transform:rotate(-2deg); background:rgba(255,255,255,0.3); }
+  .stamp:nth-child(2){ transform:rotate(1.5deg); border-color:var(--coral); }
+  .stamp:nth-child(3){ transform:rotate(-1deg); border-color:var(--cobalt); }
+  .stamp-title{ font-family:'Unbounded',sans-serif; font-size:0.85rem; font-weight:700; margin-bottom:4px; }
+  .stamp-sub{ font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:rgba(21,19,14,0.55); }
+
+  /* ===== off-duty sticky note ===== */
+  .note-wrap{ display:flex; justify-content:center; padding:10px 0 20px; }
+  .note{
+    position:relative; max-width:480px; background:rgba(255,210,63,0.35); border:1.5px solid rgba(21,19,14,0.4);
+    padding:22px 26px; transform:rotate(-1.5deg); font-family:'Space Mono',monospace; font-size:0.86rem; line-height:1.6;
+  }
+  .note::before{ content:''; position:absolute; top:-14px; left:34px; width:70px; height:24px; background:rgba(255,210,63,0.85); border:1.5px solid rgba(21,19,14,0.5); transform:rotate(-6deg); }
+
+  /* ===== CTA ===== */
+  .cta-row{ display:flex; flex-wrap:wrap; gap:16px; }
+  .btn{ font-family:'Space Mono',monospace; font-size:13.5px; text-transform:uppercase; letter-spacing:.04em; text-decoration:none; padding:15px 26px; border:2.5px solid var(--ink); display:inline-flex; align-items:center; gap:10px; transition:transform .18s ease, box-shadow .18s ease; }
+  .btn-solid{ background:var(--ink); color:var(--paper); box-shadow:var(--shadow-off-sm); }
+  .btn-solid:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+  .btn-solid:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+  .btn-outline{ background:var(--paper); color:var(--ink); box-shadow:var(--shadow-off-sm); }
+  .btn-outline:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); background:var(--cobalt); color:var(--paper); }
+  .btn-outline:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+
+  /* ===== footer ===== */
+  footer{ border-top:3px solid var(--ink); padding:34px clamp(20px,4vw,48px); position:relative; z-index:2; }
+  .footer-content{ max-width:1180px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; }
+  .footer-logo{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:14px; }
+  .footer-tag{ font-family:'Space Mono',monospace; font-size:11px; color:rgba(21,19,14,0.55); text-transform:uppercase; letter-spacing:.06em; margin-top:2px; }
+  .footer-links{ display:flex; gap:22px; }
+  .footer-links a{ text-decoration:none; font-family:'Space Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.05em; }
+  .footer-links a:hover{ color:var(--coral); }
+  .footer-copy{ font-family:'Space Mono',monospace; font-size:11px; color:rgba(21,19,14,0.4); }
+
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+
+<div class="halftone" aria-hidden="true"></div>
+<div class="grid-lines" aria-hidden="true"></div>
+<div class="reg-mark reg-tl" aria-hidden="true"></div>
+<div class="reg-mark reg-tr" aria-hidden="true"></div>
+<div class="reg-mark reg-bl" aria-hidden="true"></div>
+<div class="reg-mark reg-br" aria-hidden="true"></div>
+<div id="cur" aria-hidden="true"></div>
+
+<!-- ===== NAV ===== -->
+<nav aria-label="Primary">
+  <a href="index.html" class="logo-mark">
+    <span class="logo-box">PM</span>
+    <span class="logo-text">Paniz Etemad Mazaheri</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#home"><span>Home</span></a>
+    <a href="about.html" class="active"><span>About</span></a>
+    <a href="projects.html"><span>Projects</span></a>
+    <a href="index.html#contact"><span>Contact</span></a>
+  </div>
+  <a href="index.html#contact" class="nav-cta">Contact→</a>
+  <button class="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ===== INTRO ===== -->
+<section class="intro">
+  <div class="eyebrow"><span class="pulse"></span>About</div>
+  <h1 class="page-title">The Engineer<br><span class="accent">Behind the Panel</span></h1>
+  <p class="intro-sub">
+    I'm Paniz — I spend my time somewhere between ladder logic and lab reports. Two years commissioning control systems on a live COMAH site taught me how automation behaves in the real world, and I'm now finishing an MSc in Robotics and Automation to push further into the research side of it.
+  </p>
+
+  <!-- nameplate -->
+  <div class="id-plate">
+    <span class="rivet rivet-tl"></span><span class="rivet rivet-tr"></span>
+    <span class="rivet rivet-bl"></span><span class="rivet rivet-br"></span>
+    <div class="plate-field">
+      <span class="plate-label">Role</span>
+      <span class="plate-value">Robotics &amp; Automation Engineer</span>
+    </div>
+    <div class="plate-field">
+      <span class="plate-label">Based</span>
+      <span class="plate-value small">Manchester, UK</span>
+    </div>
+    <div class="plate-field">
+      <span class="plate-label">Education</span>
+      <span class="plate-value small">MSc Robotics &amp; Automation</span>
+    </div>
+    <div class="plate-field">
+      <span class="plate-label">Status</span>
+      <span class="plate-value small">Open to graduate roles</span>
+    </div>
+    <div class="plate-field">
+      <span class="plate-label">Available</span>
+      <span class="plate-value small">September 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EDUCATION ===== -->
+<section class="section" id="education">
+  <div class="section-head">
+    <span class="section-num mono">01</span>
+    <h2 class="section-title">Education</h2>
+    <span class="section-rule"></span>
+  </div>
+
+  <div class="track">
+    <div class="track-item">
+      <div class="track-node">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--cobalt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 8 L12 3 L22 8 L12 13 Z"/><path d="M6 10.5 V16 C6 17.5 9 19 12 19 C15 19 18 17.5 18 16 V10.5"/>
+        </svg>
+      </div>
+      <div class="track-card">
+        <div class="track-top">
+          <span class="track-role">BEng (Hons) Electronic Engineering</span>
+          <span class="track-date mono">[20XX – 20XX]</span>
+        </div>
+        <div class="track-org">University of Huddersfield · First Class Honours</div>
+        <p class="track-desc">Graduated with First Class Honours and was awarded the <b>IET Prize for Best Student</b>. This is where the interest in control systems started — the degree that everything since has built on.</p>
+      </div>
+    </div>
+
+    <div class="track-item">
+      <div class="track-node">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="2,13 7,13 9,6 13,19 16,9 18,13 22,13"/>
+        </svg>
+      </div>
+      <div class="track-card">
+        <div class="track-top">
+          <span class="track-role">MSc Robotics and Automation</span>
+          <span class="track-date mono">[20XX – Sep 2026]</span>
+        </div>
+        <div class="track-org">Manchester Metropolitan University · in progress</div>
+        <p class="track-desc">Currently completing a dissertation on <b>ECG signal processing and ML-based arrhythmia detection</b>, supervised by Dr Noushin Karimian — building the classifier, tuning it against a real-world minority-class problem, and validating it against clinical intervals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPERIENCE ===== -->
+<section class="section" id="experience">
+  <div class="section-head">
+    <span class="section-num mono">02</span>
+    <h2 class="section-title">Experience</h2>
+    <span class="section-rule"></span>
+  </div>
+
+  <div class="track">
+    <div class="track-item">
+      <div class="track-node">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--cobalt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>
+        </svg>
+      </div>
+      <div class="track-card">
+        <div class="track-top">
+          <span class="track-role">E,C&amp;I Engineer</span>
+          <span class="track-date mono">[20XX – 20XX]</span>
+        </div>
+        <div class="track-org">Syngenta · COMAH-regulated manufacturing site</div>
+        <p class="track-desc">Two years on a live chemical manufacturing site, covering <b>PLC programming</b>, <b>HMI development</b>, and functional safety work under <b>IEC 61511</b> — running HAZOP studies, LOPA and SIL assessments on real process plant, not simulations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CERTIFICATES — 4 open slots. Each card pulls its image from
+     certsData in the script at the bottom: set image:'assets/images/certs/your-file.jpg'
+     and it will show the scan/photo with a click-to-enlarge view. Leave image: null
+     to keep the placeholder icon until you add one. Title/issuer/date are edited
+     directly below. ===== -->
+<section class="section" id="certificates">
+  <div class="section-head">
+    <span class="section-num mono">03</span>
+    <h2 class="section-title">Certificates</h2>
+    <span class="section-rule"></span>
+  </div>
+
+  <div class="cert-grid">
+    <div class="cert-card" data-cert-id="1">
+      <div class="cert-thumb"></div>
+      <div class="cert-body">
+        <div class="cert-title">Certificate title</div>
+        <div class="cert-issuer mono">Issuer</div>
+        <div class="cert-date mono">[Month 20XX]</div>
+      </div>
+    </div>
+    <div class="cert-card" data-cert-id="2">
+      <div class="cert-thumb"></div>
+      <div class="cert-body">
+        <div class="cert-title">Certificate title</div>
+        <div class="cert-issuer mono">Issuer</div>
+        <div class="cert-date mono">[Month 20XX]</div>
+      </div>
+    </div>
+    <div class="cert-card" data-cert-id="3">
+      <div class="cert-thumb"></div>
+      <div class="cert-body">
+        <div class="cert-title">Certificate title</div>
+        <div class="cert-issuer mono">Issuer</div>
+        <div class="cert-date mono">[Month 20XX]</div>
+      </div>
+    </div>
+    <div class="cert-card" data-cert-id="4">
+      <div class="cert-thumb"></div>
+      <div class="cert-body">
+        <div class="cert-title">Certificate title</div>
+        <div class="cert-issuer mono">Issuer</div>
+        <div class="cert-date mono">[Month 20XX]</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CERT LIGHTBOX ===== -->
+<div class="cert-lightbox" id="certLightbox">
+  <div class="cert-lightbox-inner">
+    <button class="cert-lightbox-close" id="certLightboxClose">✕ Close</button>
+    <div class="cert-lightbox-frame">
+      <img id="certLightboxImg" src="" alt="">
+    </div>
+    <div class="cert-lightbox-caption">
+      <div class="cert-lightbox-title" id="certLightboxTitle"></div>
+      <div class="cert-lightbox-meta mono" id="certLightboxMeta"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOOLKIT ===== -->
+<section class="section" id="toolkit">
+  <div class="section-head">
+    <span class="section-num mono">04</span>
+    <h2 class="section-title">Toolkit</h2>
+    <span class="section-rule"></span>
+  </div>
+
+  <div class="toolkit-grid">
+    <div class="toolkit-group">
+      <div class="toolkit-title">Controls &amp; Automation</div>
+      <div class="toolkit-tags">
+        <span>TIA Portal</span><span>CODESYS</span><span>Siemens S7</span><span>WAGO PLC</span>
+        <span>SCADA / WinCC</span><span>IEC 61131-3</span><span>HMI Design</span>
+      </div>
+    </div>
+    <div class="toolkit-group">
+      <div class="toolkit-title">Safety &amp; Compliance</div>
+      <div class="toolkit-tags">
+        <span>IEC 61511</span><span>IEC 61508</span><span>HAZOP</span><span>LOPA</span>
+        <span>SIL Assessment</span><span>ATEX</span>
+      </div>
+    </div>
+    <div class="toolkit-group">
+      <div class="toolkit-title">Simulation &amp; Digital Twin</div>
+      <div class="toolkit-tags">
+        <span>Siemens NX MCD</span><span>Plant Simulation</span><span>CoppeliaSim</span>
+        <span>PLCSIM Advanced</span><span>OPAL-RT</span><span>Virtual Commissioning</span>
+      </div>
+    </div>
+    <div class="toolkit-group">
+      <div class="toolkit-title">Programming &amp; Data</div>
+      <div class="toolkit-tags">
+        <span>Python</span><span>MATLAB / Simulink</span><span>C++</span><span>ROS</span>
+        <span>Node-RED</span><span>OPC-UA / MQTT</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RECOGNITION ===== -->
+<section class="section" id="recognition">
+  <div class="section-head">
+    <span class="section-num mono">05</span>
+    <h2 class="section-title">Recognition</h2>
+    <span class="section-rule"></span>
+  </div>
+
+  <div class="stamp-row">
+    <div class="stamp">
+      <div class="stamp-title">IET Prize</div>
+      <div class="stamp-sub">Best Student · Huddersfield</div>
+    </div>
+    <div class="stamp">
+      <div class="stamp-title">WorldSkills UK</div>
+      <div class="stamp-sub">Industrial Automation · National Qualifier</div>
+    </div>
+    <div class="stamp">
+      <div class="stamp-title">Siemens Xcelator</div>
+      <div class="stamp-sub">Competition Entrant</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== OFF-DUTY NOTE ===== -->
+<div class="note-wrap">
+  <div class="note">
+    Off duty: probably redesigning this website again, or finding a new excuse to make something look less like a template and more like it was actually built by hand.
+  </div>
+</div>
+
+<!-- ===== CTA ===== -->
+<section class="section" id="contact-cta" style="padding-top:50px;">
+  <div class="cta-row">
+    <a href="index.html#projects" class="btn btn-solid">View Projects <span aria-hidden="true">↗</span></a>
+    <a href="https://raw.githubusercontent.com/panizmazaheri953-sudo/Portfolio2026/main/CV_V2026.pdf" class="btn btn-outline" download>Download CV <span aria-hidden="true">↓</span></a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-content">
+    <div>
+      <div class="footer-logo">Paniz Etemad Mazaheri</div>
+      <div class="footer-tag">Robotics &amp; Industrial Automation Engineering</div>
+    </div>
+    <div class="footer-links">
+      <a href="index.html#home">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Paniz Etemad Mazaheri.</div>
+  </div>
+</footer>
+
+<script>
+  /* ============================================
+     CERTIFICATE IMAGES — add a path per id to show the scan/photo.
+     Leave a slot out (or set to null) to keep the placeholder icon.
+     Title / issuer / date are edited directly in the HTML above.
+     ============================================ */
+  const certsData = {
+    1: { image: null }, // e.g. 'assets/images/certs/iet-prize.jpg'
+    2: { image: null },
+    3: { image: null },
+    4: { image: null },
+  };
+
+  const certPh = `
+    <div class="cert-ph">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="9" r="6"/><path d="M8.5 14 L7 21 L12 18.5 L17 21 L15.5 14"/>
+      </svg>
+      <span>Add certificate</span>
+    </div>`;
+  const certCorners = `
+    <span class="cert-corner cert-c-tl"></span><span class="cert-corner cert-c-tr"></span>
+    <span class="cert-corner cert-c-bl"></span><span class="cert-corner cert-c-br"></span>`;
+
+  const certLightbox = document.getElementById('certLightbox');
+  const certLightboxImg = document.getElementById('certLightboxImg');
+  const certLightboxTitle = document.getElementById('certLightboxTitle');
+  const certLightboxMeta = document.getElementById('certLightboxMeta');
+  const certLightboxClose = document.getElementById('certLightboxClose');
+
+  document.querySelectorAll('.cert-card').forEach(card => {
+    const id = card.getAttribute('data-cert-id');
+    const entry = certsData[id];
+    const thumb = card.querySelector('.cert-thumb');
+    const title = card.querySelector('.cert-title')?.textContent || '';
+    const issuer = card.querySelector('.cert-issuer')?.textContent || '';
+    const date = card.querySelector('.cert-date')?.textContent || '';
+
+    if (entry && entry.image) {
+      thumb.innerHTML = `<img src="${entry.image}" alt="${title}">${certCorners}`;
+      card.addEventListener('click', () => {
+        certLightboxImg.src = entry.image;
+        certLightboxImg.alt = title;
+        certLightboxTitle.textContent = title;
+        certLightboxMeta.textContent = `${issuer} — ${date}`;
+        certLightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    } else {
+      thumb.innerHTML = certPh + certCorners;
+    }
+  });
+
+  function closeCertLightbox() {
+    certLightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  if (certLightboxClose) certLightboxClose.addEventListener('click', closeCertLightbox);
+  if (certLightbox) certLightbox.addEventListener('click', (e) => { if (e.target === certLightbox) closeCertLightbox(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCertLightbox(); });
+
+  const cur = document.getElementById('cur');
+  window.addEventListener('mousemove', (e) => { cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px'; });
+  document.querySelectorAll('a, button, .track-card, .toolkit-group, .cert-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cur.classList.add('big'));
+    el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+  });
+
+  const burger = document.querySelector('.burger');
+  const links = document.querySelector('.nav-links');
+  burger?.addEventListener('click', () => {
+    const open = links.style.display === 'flex';
+    links.style.display = open ? 'none' : 'flex';
+    links.style.cssText += open ? '' : 'position:fixed;top:70px;left:0;right:0;background:var(--paper);flex-direction:column;padding:16px 24px;border-bottom:3px solid var(--ink);gap:2px;z-index:99;';
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.transition = 'opacity .5s ease, transform .5s ease';
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.track-item, .toolkit-group, .stamp, .cert-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(18px)';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
