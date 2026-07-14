@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact — Paniz Etemad Mazaheri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F1E6;
+    --ink:#15130E;
+    --cobalt:#2B3FE0;
+    --coral:#FF5A48;
+    --sun:#FFD23F;
+    --moss:#3E5C3A;
+    --shadow-off: 7px 7px 0px var(--ink);
+    --shadow-off-sm: 4px 4px 0px var(--ink);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ background:var(--paper); color:var(--ink); font-family:'Inter',sans-serif; overflow-x:hidden; position:relative; cursor:none; min-height:100vh; display:flex; flex-direction:column; }
+  @media (hover:none), (pointer:coarse){ body{ cursor:auto; } }
+  ::selection{ background:var(--sun); color:var(--ink); }
+  a{ color:inherit; }
+  h1,h2,.display{ font-family:'Unbounded',sans-serif; }
+  .mono{ font-family:'Space Mono',monospace; }
+  a:focus-visible, button:focus-visible{ outline:3px solid var(--cobalt); outline-offset:3px; }
+
+  /* ===== blueprint background texture ===== */
+  .halftone{ position:fixed; inset:0; z-index:0; pointer-events:none; background-image: radial-gradient(var(--ink) 1px, transparent 1px); background-size:22px 22px; opacity:.055; }
+  .grid-lines{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(43,63,224,0.05) 0, rgba(43,63,224,0.05) 1px, transparent 1px, transparent 64px),
+      repeating-linear-gradient(0deg, rgba(43,63,224,0.05) 0, rgba(43,63,224,0.05) 1px, transparent 1px, transparent 64px);
+  }
+  .reg-mark{ position:fixed; width:22px; height:22px; z-index:1; pointer-events:none; opacity:.4; }
+  .reg-mark::before, .reg-mark::after{ content:''; position:absolute; background:var(--ink); }
+  .reg-mark::before{ top:50%; left:0; width:100%; height:1.5px; transform:translateY(-50%); }
+  .reg-mark::after{ left:50%; top:0; height:100%; width:1.5px; transform:translateX(-50%); }
+  .reg-tl{ top:14px; left:14px; } .reg-tr{ top:14px; right:14px; }
+  .reg-bl{ bottom:14px; left:14px; } .reg-br{ bottom:14px; right:14px; }
+  @media (max-width:700px){ .reg-mark{ display:none; } }
+
+  /* ===== custom cursor ===== */
+  #cur{ position:fixed; top:0; left:0; width:26px; height:26px; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); mix-blend-mode:difference; transition:width .25s ease, height .25s ease; }
+  #cur::before,#cur::after{ content:''; position:absolute; background:var(--paper); }
+  #cur::before{ top:50%; left:0; width:100%; height:2px; transform:translateY(-50%); }
+  #cur::after{ left:50%; top:0; height:100%; width:2px; transform:translateX(-50%); }
+  #cur.big{ width:52px; height:52px; }
+  @media (hover:none), (pointer:coarse){ #cur{ display:none; } }
+
+  /* ===== nav ===== */
+  nav{ position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:16px clamp(20px,4vw,48px); background:var(--paper); border-bottom:3px solid var(--ink); }
+  .logo-mark{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .logo-box{ width:38px; height:38px; background:var(--cobalt); border:2.5px solid var(--ink); color:var(--paper); font-family:'Unbounded',sans-serif; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; transform:rotate(-6deg); box-shadow:3px 3px 0 var(--ink); }
+  .logo-text{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:15px; letter-spacing:-.01em; }
+  .nav-links{ display:flex; align-items:center; gap:2px; }
+  .nav-links a{ text-decoration:none; font-family:'Space Mono',monospace; font-size:12.5px; text-transform:uppercase; letter-spacing:.05em; padding:9px 14px; position:relative; }
+  .nav-links a span{ position:relative; }
+  .nav-links a span::after{ content:''; position:absolute; left:0; bottom:-4px; width:0%; height:2px; background:var(--coral); transition:width .3s ease; }
+  .nav-links a:hover span::after{ width:100%; }
+  .nav-links a.active span::after{ width:100%; background:var(--ink); }
+  .nav-cta{ font-family:'Space Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.04em; text-decoration:none; background:var(--ink); color:var(--paper); padding:10px 18px; border:2.5px solid var(--ink); box-shadow:var(--shadow-off-sm); transition:transform .18s ease, box-shadow .18s ease; display:none; }
+  .nav-cta:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+  .nav-cta:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+  @media (min-width:860px){ .nav-cta{ display:inline-block; } }
+  .burger{ display:none; }
+  @media (max-width:859px){ .nav-links{ display:none; } .burger{ display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px; } .burger span{ width:24px; height:2.5px; background:var(--ink); display:block; } }
+
+  /* ===== main ===== */
+  main{ flex:1; display:flex; align-items:center; position:relative; z-index:2; }
+  .contact-wrap{ max-width:900px; margin:0 auto; padding:150px clamp(20px,4vw,48px) 70px; width:100%; }
+  .eyebrow{ font-family:'Space Mono',monospace; font-size:12.5px; text-transform:uppercase; letter-spacing:.14em; display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border:2px solid var(--ink); background:var(--sun); box-shadow:var(--shadow-off-sm); transform:rotate(-1.5deg); margin-bottom:26px; }
+  .eyebrow .pulse{ width:7px; height:7px; border-radius:50%; background:var(--moss); animation:pulse 1.6s ease infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+  .page-title{ font-size:clamp(44px,7.4vw,90px); line-height:0.95; font-weight:800; letter-spacing:-.02em; margin-bottom:18px; }
+  .page-title .accent{ color:var(--coral); }
+  .contact-sub{ max-width:480px; font-size:clamp(15px,1.4vw,17px); line-height:1.65; color:rgba(21,19,14,0.75); margin-bottom:14px; }
+  .location-line{ display:flex; align-items:center; gap:8px; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.05em; text-transform:uppercase; color:rgba(21,19,14,0.55); margin-bottom:50px; }
+  .location-line svg{ width:14px; height:14px; }
+
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+  @media (max-width:640px){ .contact-grid{ grid-template-columns:1fr; } }
+
+  .contact-card{
+    display:flex; align-items:center; gap:18px; text-decoration:none; color:var(--ink);
+    border:2.5px solid var(--ink); background:rgba(255,255,255,0.35); box-shadow:var(--shadow-off);
+    padding:26px 24px; transition:transform .22s ease, box-shadow .22s ease, background .22s ease;
+  }
+  .contact-card:hover{ transform:translate(-3px,-3px); box-shadow:11px 11px 0 var(--ink); background:rgba(255,255,255,0.55); }
+  .contact-card:hover .contact-icon{ background:var(--cobalt); border-color:var(--cobalt); color:var(--paper); }
+  .contact-icon{
+    flex-shrink:0; width:52px; height:52px; border:2.5px solid var(--ink); background:var(--paper);
+    display:flex; align-items:center; justify-content:center; transition:background .22s ease, border-color .22s ease, color .22s ease;
+  }
+  .contact-icon svg{ width:24px; height:24px; }
+  .contact-text{ display:flex; flex-direction:column; gap:4px; min-width:0; }
+  .contact-label{ font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--cobalt); font-weight:700; }
+  .contact-value{ font-family:'Unbounded',sans-serif; font-size:1.05rem; font-weight:700; word-break:break-word; }
+  .contact-arrow{ margin-left:auto; font-size:1.2rem; color:var(--coral); flex-shrink:0; }
+
+  /* ===== footer ===== */
+  footer{ border-top:3px solid var(--ink); padding:34px clamp(20px,4vw,48px); position:relative; z-index:2; }
+  .footer-content{ max-width:900px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; }
+  .footer-logo{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:14px; }
+  .footer-tag{ font-family:'Space Mono',monospace; font-size:11px; color:rgba(21,19,14,0.55); text-transform:uppercase; letter-spacing:.06em; margin-top:2px; }
+  .footer-links{ display:flex; gap:22px; }
+  .footer-links a{ text-decoration:none; font-family:'Space Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.05em; }
+  .footer-links a:hover{ color:var(--coral); }
+  .footer-copy{ font-family:'Space Mono',monospace; font-size:11px; color:rgba(21,19,14,0.4); }
+
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+
+<div class="halftone" aria-hidden="true"></div>
+<div class="grid-lines" aria-hidden="true"></div>
+<div class="reg-mark reg-tl" aria-hidden="true"></div>
+<div class="reg-mark reg-tr" aria-hidden="true"></div>
+<div class="reg-mark reg-bl" aria-hidden="true"></div>
+<div class="reg-mark reg-br" aria-hidden="true"></div>
+<div id="cur" aria-hidden="true"></div>
+
+<!-- ===== NAV ===== -->
+<<nav aria-label="Primary">
+  <a href="index.html" class="logo-mark">
+    <span class="logo-box">PM</span>
+    <span class="logo-text">Paniz Etemad Mazaheri</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html"><span>Home</span></a>
+    <a href="about.html"><span>About</span></a>
+    <a href="projects.html"><span>Projects</span></a>
+    <a href="contact.html" class="active"><span>Contact</span></a>
+  </div>
+  <a href="contact.html" class="nav-cta">Contact→</a>
+  <button class="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+</nav>
+<main>
+  <div class="contact-wrap">
+    <div class="eyebrow"><span class="pulse"></span>Get in touch</div>
+    <h1 class="page-title">Let's Talk<br><span class="accent">Shop</span></h1>
+    <p class="contact-sub">Open to graduate roles and always happy to talk automation, robotics, or anything in between. Reach out directly — no forms, no middlemen.</p>
+    <div class="location-line">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>
+      </svg>
+      Manchester, UK
+    </div>
+
+    <div class="contact-grid">
+      <!-- replace the email address in BOTH the mailto: link and the visible text -->
+      <a class="contact-card" href="mailto:youremail@example.com">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2.5" y="5" width="19" height="14" rx="1.5"/><path d="M3 6.5 L12 13 L21 6.5"/>
+          </svg>
+        </div>
+        <div class="contact-text">
+          <span class="contact-label">Email</span>
+          <span class="contact-value">youremail@example.com</span>
+        </div>
+        <span class="contact-arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <!-- replace the phone number in BOTH the tel: link and the visible text -->
+      <a class="contact-card" href="tel:+441234567890">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h4l2 5-2.5 1.5a12 12 0 0 0 6 6L15 14l5 2v4c0 1-1 2-2 2C10 22 2 14 2 6c0-1 1-2 2-2z"/>
+          </svg>
+        </div>
+        <div class="contact-text">
+          <span class="contact-label">Phone</span>
+          <span class="contact-value">+44 1234 567 890</span>
+        </div>
+        <span class="contact-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-content">
+    <div>
+      <div class="footer-logo">Paniz Etemad Mazaheri</div>
+      <div class="footer-tag">Robotics &amp; Industrial Automation Engineering</div>
+    </div>
+    <div class="footer-links">
+      <a href="index.html#home">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+    </div>
+    <div class="footer-copy">© 2026 Paniz Etemad Mazaheri.</div>
+  </div>
+</footer>
+
+<script>
+  const cur = document.getElementById('cur');
+  window.addEventListener('mousemove', (e) => { cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px'; });
+  document.querySelectorAll('a, button, .contact-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cur.classList.add('big'));
+    el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+  });
+
+  const burger = document.querySelector('.burger');
+  const links = document.querySelector('.nav-links');
+  burger?.addEventListener('click', () => {
+    const open = links.style.display === 'flex';
+    links.style.display = open ? 'none' : 'flex';
+    links.style.cssText += open ? '' : 'position:fixed;top:70px;left:0;right:0;background:var(--paper);flex-direction:column;padding:16px 24px;border-bottom:3px solid var(--ink);gap:2px;z-index:99;';
+  });
+</script>
+
+</body>
+</html>
