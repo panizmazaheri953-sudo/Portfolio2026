@@ -211,9 +211,18 @@
     transition:box-shadow .3s ease;
   }
   .project-card:hover .card-face{ box-shadow:11px 11px 0 var(--ink); }
-  .card-back{ transform:rotateY(180deg); overflow-y:auto; }
-  .card-back::-webkit-scrollbar{ width:4px; }
-  .card-back::-webkit-scrollbar-thumb{ background:rgba(21,19,14,0.2); }
+  .card-back{ transform:rotateY(180deg); overflow:hidden; }
+
+  /* Scroll wrapper lives INSIDE .card-back, without backface-visibility on it,
+     because backface-visibility:hidden breaks wheel/touch scrolling in
+     Chrome/Firefox on the element it's applied to. */
+  .card-back-scroll{
+    height:100%;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .card-back-scroll::-webkit-scrollbar{ width:4px; }
+  .card-back-scroll::-webkit-scrollbar-thumb{ background:rgba(21,19,14,0.2); }
 
   .project-media{
     position:relative; height:250px; border-bottom:2.5px solid var(--ink); overflow:hidden; flex-shrink:0;
@@ -226,6 +235,37 @@
     transition:left .6s ease; z-index:6; pointer-events:none;
   }
   .project-card:hover .project-media::after{ left:130%; }
+
+  /* ===== carousel (front-face media) ===== */
+  .carousel-container{ position:relative; width:100%; height:100%; overflow:hidden; }
+  .carousel-slides{
+    display:flex; width:100%; height:100%;
+    transition:transform .5s cubic-bezier(.4,0,.2,1);
+  }
+  .carousel-slide{ flex:0 0 100%; width:100%; height:100%; }
+  .carousel-slide img, .carousel-slide video{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .carousel-btn{
+    position:absolute; top:50%; transform:translateY(-50%); z-index:5;
+    width:28px; height:28px; border:2px solid var(--ink); background:var(--paper);
+    cursor:pointer; font-size:15px; line-height:1; display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono',monospace; transition:background .2s ease, transform .2s ease;
+  }
+  .carousel-btn:hover{ background:var(--sun); }
+  .carousel-btn:active{ transform:translateY(-50%) scale(.92); }
+  .carousel-btn-prev{ left:8px; }
+  .carousel-btn-next{ right:8px; }
+
+  .carousel-dots{
+    position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+    display:flex; gap:6px; z-index:5;
+  }
+  .carousel-dot{
+    width:7px; height:7px; border-radius:50%; background:rgba(245,241,230,0.55);
+    border:1.5px solid var(--ink); cursor:pointer; padding:0; transition:background .2s ease, transform .2s ease;
+  }
+  .carousel-dot:hover{ transform:scale(1.15); }
+  .carousel-dot.active{ background:var(--coral); }
 
   .corner{ position:absolute; width:13px; height:13px; opacity:.55; z-index:2; pointer-events:none; }
   .c-tl{ top:8px; left:8px; border-top:2px solid var(--ink); border-left:2px solid var(--ink); }
@@ -800,6 +840,26 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         this.slidesContainer.appendChild(slide);
       });
+
+      /* build dot indicators */
+      if (this.dotsContainer) {
+        this.dotsContainer.innerHTML = '';
+        if (this.mediaItems.length > 1) {
+          this.mediaItems.forEach((_, idx) => {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot' + (idx === this.currentIndex ? ' active' : '');
+            dot.type = 'button';
+            dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
+            dot.addEventListener('click', (e) => {
+              e.stopPropagation();
+              this.goTo(idx);
+              this.resetAutoPlay();
+            });
+            this.dotsContainer.appendChild(dot);
+          });
+        }
+      }
+
       this.updateDots(); this.updateSlidePosition();
     }
     updateSlidePosition() {
@@ -855,8 +915,8 @@ document.addEventListener('DOMContentLoaded', function () {
       <div class="carousel-container">
         <div class="carousel-slides"></div>
         ${mediaItems.length > 1 ? `
-          <button class="carousel-btn carousel-btn-prev">‹</button>
-          <button class="carousel-btn carousel-btn-next">›</button>
+          <button class="carousel-btn carousel-btn-prev" type="button" aria-label="Previous">‹</button>
+          <button class="carousel-btn carousel-btn-next" type="button" aria-label="Next">›</button>
           <div class="carousel-dots"></div>` : ''}
       </div>${badgeHTML}${CORNERS}`;
     const carouselContainer = mediaContainer.querySelector('.carousel-container');
@@ -867,23 +927,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const data = projectsData[id];
     if (!data) return '';
     return `
-      <div class="back-body">
-        <div class="back-top">
-          <div class="back-meta">
-            <span class="back-category">${data.category}</span>
-            <span class="back-year">${data.year}</span>
+      <div class="card-back-scroll">
+        <div class="back-body">
+          <div class="back-top">
+            <div class="back-meta">
+              <span class="back-category">${data.category}</span>
+              <span class="back-year">${data.year}</span>
+            </div>
+            <button class="back-close" data-close="${id}">↺ Back</button>
           </div>
-          <button class="back-close" data-close="${id}">↺ Back</button>
-        </div>
-        <h3 class="back-title">${data.title}</h3>
-        <p class="back-desc">${data.description}</p>
-        <div class="back-section">
-          <div class="back-section-title">Key Highlights</div>
-          <ul class="back-highlights">${data.highlights.map(h => `<li>${h}</li>`).join('')}</ul>
-        </div>
-        <div class="back-section">
-          <div class="back-section-title">Technologies Used</div>
-          <div class="back-tags">${data.tags.map(t => `<span>${t}</span>`).join('')}</div>
+          <h3 class="back-title">${data.title}</h3>
+          <p class="back-desc">${data.description}</p>
+          <div class="back-section">
+            <div class="back-section-title">Key Highlights</div>
+            <ul class="back-highlights">${data.highlights.map(h => `<li>${h}</li>`).join('')}</ul>
+          </div>
+          <div class="back-section">
+            <div class="back-section-title">Technologies Used</div>
+            <div class="back-tags">${data.tags.map(t => `<span>${t}</span>`).join('')}</div>
+          </div>
         </div>
       </div>`;
   }
