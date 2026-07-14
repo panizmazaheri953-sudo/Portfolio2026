@@ -767,7 +767,7 @@ document.addEventListener('DOMContentLoaded', function () {
   tags: ['ROS', 'TurtleBot3', 'Gazebo', 'Python', 'Odometry', 'Service Client'], 
   media: [
     { type: 'image', src: 'Assets/gazebo.png', alt: 'TurtleBot3 in Gazebo simulation' }
-  ]
+  ] 
 },
    7: { 
   title: 'Overfill Protection System SIL Design for Solvent Storage', 
@@ -1030,6 +1030,33 @@ document.addEventListener('DOMContentLoaded', function () {
     el.addEventListener('mouseenter', () => cur.classList.add('big'));
     el.addEventListener('mouseleave', () => cur.classList.remove('big'));
   });
+
+  /* ===== fix: backface-visibility:hidden (needed for the 3D flip) swallows
+     wheel events in Chrome/Firefox instead of letting them bubble up to
+     scroll the page. Manually forward wheel scrolling for anything inside
+     a .project-card, letting the internal .card-back-scroll panel scroll
+     itself normally until it hits its top/bottom edge. ===== */
+  document.addEventListener('wheel', function (e) {
+    const card = e.target.closest('.project-card');
+    if (!card) return;
+
+    const scrollEl = e.target.closest('.card-back-scroll');
+    if (scrollEl) {
+      const canScroll = scrollEl.scrollHeight > scrollEl.clientHeight;
+      const atTop = scrollEl.scrollTop <= 0;
+      const atBottom = scrollEl.scrollTop + scrollEl.clientHeight >= scrollEl.scrollHeight - 1;
+      if (!canScroll || (e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
+        window.scrollBy(0, e.deltaY);
+        e.preventDefault();
+      }
+      // otherwise let the panel scroll itself natively
+      return;
+    }
+
+    // over the card front (or back header/tags), not inside the scroll panel
+    window.scrollBy(0, e.deltaY);
+    e.preventDefault();
+  }, { passive: false });
 
   /* ===== mobile nav ===== */
   const burger = document.querySelector('.burger');
