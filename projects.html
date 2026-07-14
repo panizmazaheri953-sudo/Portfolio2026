@@ -174,7 +174,7 @@
   /* ===== flip card ===== */
   .project-card{
     position:relative;
-    height:480px;
+    height:560px;
     perspective:1800px;
     opacity:0; transform:translateY(24px);
     transition:opacity .5s ease, transform .5s ease;
@@ -298,6 +298,10 @@
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
     .card-inner{ transition:none; }
+  }
+    .project-card[data-id="3"] .project-media video {
+    transform: scale(1.4);
+    object-fit: cover;
   }
 </style>
 </head>
