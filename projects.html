@@ -299,12 +299,7 @@
     *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
     .card-inner{ transition:none; }
   }
-/* ===== make batch mixing video fill the box ===== */
-.project-card[data-id="3"] .project-media video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
+
 </style>
 </head>
 <body>
@@ -663,9 +658,9 @@ document.addEventListener('DOMContentLoaded', function () {
     'Implemented manual/automatic modes with valve status feedback and interlocks'
   ], 
   tags: ['CODESYS', 'IEC-61131-3', 'SCADA', 'HMI Design', 'Ladder Logic'], 
-      media: [
-    { type: 'video', src: 'Assets/Video Project 2.mp4', alt: 'Batch mixing plant simulation' }
-  ] 
+  media: [
+    { type: 'video', src: 'Assets/batch.mp4', alt: 'Batch mixing plant simulation' }
+  ]
 },
    4: { 
   title: 'Industrial IoT: Sensor-to-Cloud Monitoring System', 
@@ -679,7 +674,9 @@ document.addEventListener('DOMContentLoaded', function () {
     'Implemented data processing including running averages and unit conversions (K)'
   ], 
   tags: ['Node-RED', 'Raspberry Pi', 'DHT11', 'Insights Hub', 'MQTT', 'IoT'], 
-  media: [] 
+ media: [
+    { type: 'video', src: 'Assets/iot.mp4', alt: 'IoT sensor-to-cloud monitoring dashboard' }
+  ] 
 },
    5: { 
   title: 'ECG Arrhythmia Detection Using Machine Learning', 
