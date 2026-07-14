@@ -396,23 +396,58 @@
     </div>
   </article>
 
-  <article class="project-card" data-category="plc" data-id="2">
-    <div class="rev-stamp">Rev B</div>
-    <span class="tear-line"></span><span class="punch-hole"></span>
-    <div class="card-inner">
-      <div class="card-face card-front">
-        <div class="project-media"><div class="year-badge">20XX</div></div>
-        <div class="project-body">
-          <div class="project-meta"><span class="project-cat">Category</span><span class="project-date">Date range</span></div>
-          <h2 class="project-name">Project title 02</h2>
-          <p class="project-summary">One or two sentence summary of what this project was and the problem it solved.</p>
-          <div class="project-tags"><span>Tool</span><span>Tool</span><span>Tool</span></div>
-          <button class="expand-btn" data-target="2">Flip for details ↻</button>
+  
+  <article class="project-card" data-category="robotics" data-id="2">
+  <div class="rev-stamp"></div>
+  <span class="tear-line"></span><span class="punch-hole"></span>
+  <div class="card-inner">
+    <div class="card-face card-front">
+      <div class="project-media"><div class="year-badge">2026</div></div>
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="project-cat">Robotics, Simulation, Kinematics</span>
+          <span class="project-date"></span>
         </div>
+        <h2 class="project-name">Robotic Cell Design & Simulation: Phones-R-Us</h2>
+        <p class="project-summary">Simulated a complete robotic workcell for phone packaging with LUA-programmed motion planning and MATLAB-validated kinematics.</p>
+        <div class="project-tags">
+          <span>CoppeliaSim</span>
+          <span>LUA</span>
+          <span>MATLAB</span>
+          <span>Kinematics</span>
+        </div>
+        <button class="expand-btn" data-target="2">Flip for details ↻</button>
       </div>
-      <div class="card-face card-back" data-back="2"></div>
     </div>
-  </article>
+    <div class="card-face card-back" data-back="2"></div>
+  </div>
+</article>
+  
+<article class="project-card" data-category="plc" data-id="3">
+  <div class="rev-stamp"></div>
+  <span class="tear-line"></span><span class="punch-hole"></span>
+  <div class="card-inner">
+    <div class="card-face card-front">
+      <div class="project-media"><div class="year-badge">2024</div></div>
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="project-cat">PLC, SCADA, Industrial Automation</span>
+          <span class="project-date"></span>
+        </div>
+        <h2 class="project-name">Batch Mixing Plant: Automated Control System</h2>
+        <p class="project-summary">PLC-based sequential control for powder-water batch mixing with SCADA supervision, HMI visualization, and IEC-61131-3 compliant logic.</p>
+        <div class="project-tags">
+          <span>CODESYS</span>
+          <span>IEC-61131-3</span>
+          <span>SCADA</span>
+          <span>HMI Design</span>
+        </div>
+        <button class="expand-btn" data-target="3">Flip for details ↻</button>
+      </div>
+    </div>
+    <div class="card-face card-back" data-back="3"></div>
+  </div>
+</article>
 
   <article class="project-card" data-category="research" data-id="3">
     <div class="rev-stamp">Rev C</div>
@@ -571,10 +606,33 @@ document.addEventListener('DOMContentLoaded', function () {
     
     
     
-    2: { title:'title hi', category:'PLC / SCADA', year:'20XX', description:'Full description of project 02 goes here — what it was, why it mattered, and your role in it.',
-         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
-    3: { title:'Project title 03', category:'Research', year:'20XX', description:'Full description of project 03 goes here — what it was, why it mattered, and your role in it.',
-         highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
+2: { 
+  title: 'Robotic Cell Design & Simulation: Phones-R-Us', 
+  category: 'Robotics', 
+  year: '2024', 
+  description: 'Designed and simulated a complete robotic workcell for a phone packaging line using CoppeliaSim. The project involved selecting an appropriate robot and EOAT based on payload, reach, and task suitability, defining the cell layout with conveyors, tables, boxes, and bins, and performing forward/inverse kinematics analysis in MATLAB to validate motion paths. I programmed the full robot control logic in LUA, implementing motion planning for pick-and-place operations with collision-free trajectories. A risk assessment and PESTLE analysis were also conducted to evaluate safety and broader business implications of the automation solution.',
+  highlights: [
+    'Designed robotic cell layout with optimized positioning in CoppeliaSim',
+    'Programmed robot motion planning and logic using LUA scripting',
+    'Performed kinematic analysis in MATLAB to validate pick-and-place trajectories'
+  ], 
+  tags: ['CoppeliaSim', 'LUA', 'MATLAB', 'Kinematics'], 
+  media: [] 
+},
+   3: { 
+  title: 'Batch Mixing Plant: Automated Control System', 
+  category: 'PLC / SCADA', 
+  year: '2024', 
+  description: 'Designed and implemented a fully automated batch mixing control system for a powder-water mixing process. The system sequences material loading, weighing, dosing, mixing, and discharge using PLC logic programmed in CODESYS v2.3. Load cells and turbine flowmeters provide real-time feedback for precise powder (100kg) and water (100L) measurement, while interlocking safety conditions prevent sequencing errors. A SCADA/HMI interface enables manual override for commissioning and fault finding, plus real-time monitoring of valve states, agitator status, and alarm conditions. The control strategy follows IEC 61131-3 standards using multiple programming languages (ST, LD, FBD, SFC) to ensure reliable, repeatable batch production.',
+  highlights: [
+    'Developed sequential batch control logic with interlocking safety conditions in CODESYS',
+    'Programmed using multiple IEC-61131-3 languages (ST, LD, FBD, SFC)',
+    'Designed SCADA/HMI interface for real-time process monitoring and alarm management',
+    'Implemented manual/automatic modes with valve status feedback and interlocks'
+  ], 
+  tags: ['CODESYS', 'IEC-61131-3', 'SCADA', 'HMI Design', 'Ladder Logic'], 
+  media: [] 
+},
     4: { title:'Project title 04', category:'IoT', year:'20XX', description:'Full description of project 04 goes here — what it was, why it mattered, and your role in it.',
          highlights:['Highlight one','Highlight two','Highlight three'], tags:['Tool','Tool','Tool'], media:[] },
     5: { title:'Project title 05', category:'Robotics', year:'20XX', description:'Full description of project 05 goes here — what it was, why it mattered, and your role in it.',
