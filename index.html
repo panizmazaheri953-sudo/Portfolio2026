@@ -243,6 +243,15 @@
   .btn-icon:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); background:var(--cobalt); color:var(--paper); }
   .btn-icon:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
 
+  /* labeled social button (LinkedIn icon + text), same visual language as .btn */
+  .btn-social{
+    background:var(--paper); color:var(--ink);
+    box-shadow:var(--shadow-off-sm);
+  }
+  .btn-social svg{ width:16px; height:16px; }
+  .btn-social:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); background:var(--cobalt); color:var(--paper); }
+  .btn-social:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink); }
+
   .stat-row{ display:flex; gap:34px; flex-wrap:wrap; }
   .stat{ font-family:'Space Mono',monospace; }
   .stat b{ display:block; font-size:22px; font-family:'Unbounded',sans-serif; font-weight:700; }
@@ -411,10 +420,11 @@ IET Prize winner Industrial Electronics Engineer specializing in automation and 
       <a href="projects.html" class="btn btn-solid">View Projects <span aria-hidden="true">↗</span></a>
      <a href="https://raw.githubusercontent.com/panizmazaheri953-sudo/Portfolio2026/main/CV_V2026.pdf" class="btn btn-outline" download>Download CV <span aria-hidden="true">↓</span></a>
       <!-- LinkedIn: swap the href below for your profile URL -->
-      <a href="https://www.linkedin.com/in/paniz-etemad-mazaheri-8b8379294" target="_blank" rel="noopener" class="btn-icon" aria-label="LinkedIn profile">
+      <a href="https://www.linkedin.com/in/paniz-etemad-mazaheri-8b8379294" target="_blank" rel="noopener" class="btn btn-social">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/>
         </svg>
+        LinkedIn
       </a>
     </div>
 
