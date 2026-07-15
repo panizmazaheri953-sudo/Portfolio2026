@@ -211,7 +211,9 @@
     transition:box-shadow .3s ease;
   }
   .project-card:hover .card-face{ box-shadow:11px 11px 0 var(--ink); }
-  .card-back{ transform:rotateY(180deg); overflow:hidden; }
+  .card-back{ transform:rotateY(180deg); overflow:hidden; pointer-events:none; }
+  .project-card.flipped .card-back{ pointer-events:auto; }
+  .project-card.flipped .card-front{ pointer-events:none; }
 
   /* Scroll wrapper lives INSIDE .card-back, without backface-visibility on it,
      because backface-visibility:hidden breaks wheel/touch scrolling in
@@ -220,6 +222,7 @@
     height:100%;
     overflow-y:auto;
     -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
   }
   .card-back-scroll::-webkit-scrollbar{ width:4px; }
   .card-back-scroll::-webkit-scrollbar-thumb{ background:rgba(21,19,14,0.2); }
@@ -655,7 +658,7 @@ document.addEventListener('DOMContentLoaded', function () {
  1: { 
   title: 'FESTO CP Lab Output Station: Digital Twin', 
   category: 'Robotics', 
-  year: '2024', 
+  year: '2026', 
   description: 'The Output Station is the final stage of a phone case manufacturing line, responsible for transporting cases across two conveyors, detecting carrier positions with sensors, and performing precise pick-and-place operations onto final trays. To eliminate commissioning risks and reduce physical testing downtime, I built a digital twin of the station that mirrors every mechanical and control function. I developed the virtual model, programmed the automation logic, and validated the entire sequence in simulation, from conveyor startup to sensor triggers to robotic placement. This approach caught logic errors early and ensured a smooth transition to physical deployment.',
   highlights: [
        'Built a digital twin of the Pick&Place station using Siemens NX',
@@ -681,7 +684,7 @@ document.addEventListener('DOMContentLoaded', function () {
 2: { 
   title: 'Robotic Cell Design & Simulation: Phones-R-Us', 
   category: 'Robotics', 
-  year: '2024', 
+  year: '2026', 
   description: 'Designed and simulated a complete robotic workcell for a phone packaging line using CoppeliaSim. The project involved selecting an appropriate robot and EOAT based on payload, reach, and task suitability, defining the cell layout with conveyors, tables, boxes, and bins, and performing forward/inverse kinematics analysis in MATLAB to validate motion paths. I programmed the full robot control logic in LUA, implementing motion planning for pick-and-place operations with collision-free trajectories. A risk assessment and PESTLE analysis were also conducted to evaluate safety and broader business implications of the automation solution.',
   highlights: [
     'Designed robotic cell layout with optimized positioning in CoppeliaSim',
@@ -697,7 +700,7 @@ document.addEventListener('DOMContentLoaded', function () {
    3: { 
   title: 'Batch Mixing Plant: Automated Control System', 
   category: 'PLC / SCADA', 
-  year: '2024', 
+  year: '2026', 
   description: 'Designed and implemented a fully automated batch mixing control system for a powder-water mixing process. The system sequences material loading, weighing, dosing, mixing, and discharge using PLC logic programmed in CODESYS v2.3. Load cells and turbine flowmeters provide real-time feedback for precise powder (100kg) and water (100L) measurement, while interlocking safety conditions prevent sequencing errors. A SCADA/HMI interface enables manual override for commissioning and fault finding, plus real-time monitoring of valve states, agitator status, and alarm conditions. The control strategy follows IEC 61131-3 standards using multiple programming languages (ST, LD, FBD, SFC) to ensure reliable, repeatable batch production.',
   highlights: [
     'Developed sequential batch control logic with interlocking safety conditions in CODESYS',
@@ -780,7 +783,7 @@ document.addEventListener('DOMContentLoaded', function () {
    7: { 
   title: 'Overfill Protection System SIL Design for Solvent Storage', 
   category: 'Research', 
-  year: '2024', 
+  year: '2026', 
   description: 'Developed a standardised design procedure for overfill protection systems on a solvent storage vessel being transferred from a tanker, complying with the IEC 61511 functional safety lifecycle. Compared SIL 1 and SIL 2 designs for cost and reliability, selecting appropriate instruments based on Probability of Failure on Demand (PFD average), Architectural Constraints, and Systematic Capabilities. Calculated PFDs theoretically, validated against manufacturer datasheets, and compared with Exida ExSILentia software results. Created CAD models for both designs and conducted cost-benefit analysis revealing that SIL 2 significantly increases cost and complexity while a well-designed SIL 1 system meets the process safety requirements for a top tier COMAH site. Demonstrated that safety does not always follow the same rules and each system design should be tailored to the specific context considering both immediate risks and long term operational sustainability.',
   highlights: [
     'Designed SIL 1 and SIL 2 overfill protection systems following IEC 61511 lifecycle',
